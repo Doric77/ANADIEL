@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Jan Henserker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA JANA (ZŁOTO / OTCHŁAŃ / HISTORIA) --- */
+        :root {
+            --accent: #b7950b;                 /* Ciemne, stare złoto */
+            --accent-void: #2e4053;            /* Granat Khan'den */
+            --bg-panel: rgba(20, 25, 30, 0.95);
+            --text-primary: #d4e6f1;
+            
+            --border-color: rgba(183, 149, 11, 0.3);
+        }
+
+        /* --- BAZA I TŁO --- */
+        body {
+            background-color: #050a0e;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(10, 20, 30, 0.3)), url('assets/jan_tlo.png');
+            background-size: cover; background-position: center;
+            filter: blur(1px); transform: scale(1.05); will-change: transform;
+        }
+
+        /* --- KONTENER --- */
+        .container {
+            max-width: 1200px; width: 100%;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3.5rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--accent);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        .logline {
+            font-size: 1.2rem; font-weight: 500; font-style: italic;
+            background: rgba(183, 149, 11, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 25px; color: #f9e79f;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #151a20, #0a0e10); 
+            color: #b7950b;
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid #333; border-left: 4px solid #5d4a05;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #1f2a35;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(10, 15, 20, 0.6);
+            border: 1px solid #333; border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* SEKRETY */
+        .accordion.redacted { opacity: 0.9; color: #85929e; font-family: 'Cinzel', serif; letter-spacing: 2px; }
+        .redacted-text {
+            font-family: 'Cinzel', serif; text-align: center; padding: 30px;
+            color: #d4e6f1; background: rgba(46, 64, 83, 0.3); 
+            font-style: italic; border: 1px dashed var(--accent-void);
+        }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.4rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s ease; filter: sepia(0.2) contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.03); filter: sepia(0); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.95rem; background: rgba(20, 25, 30, 0.8);
+            border: 1px solid var(--border-color);
+        }
+        .infobox td { padding: 15px; border-bottom: 1px solid rgba(183, 149, 11, 0.2); }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(20, 25, 30, 0.8); padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #f9e79f; text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .related-links a:hover { color: #fff; padding-left: 10px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #b7950b;
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px; border: 1px solid #5d4a05;
+            padding: 10px 20px; text-align: center;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(183, 149, 11, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>GENERAŁ JAN HENSERKER</h1>
+
+            <div class="logline">
+                Legenda Zavr, zdobywca Khan'den i człowiek, którego imię budzi szacunek w każdym zakątku królestwa. 
+                Oficjalnie: Zaginął podczas ostatniej Wielkiej Ekspedycji. 
+                Prawda jest jednak o wiele mroczniejsza niż jakakolwiek bestia, z którą walczył.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Postawny, siwy mężczyzna o twarzy wykutej z granitu. Nosił stary mundur Zavr, zawsze nienagannie czysty, mimo brudu frontu.</li>
+                    <li><strong>Atrybut:</strong> Mapa Khan'den nakreślona własną krwią i atramentem, której nikt inny nie potrafił odczytać.</li>
+                    <li><strong>Reputacja:</strong> Żołnierze wierzyli, że dopóki Jan dowodzi, śmierć omija ich oddział.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: BOHATER KHAN'DEN</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Ekspedycje:</strong> Poprowadził trzy wielkie wyprawy do świata bestii (Khan'den), by zdobyć zasoby i wiedzę dla Zavr.</li>
+                    <li><strong>Przyjaźń z Rafem:</strong> On i ojciec Cade'a (Raf) byli nierozłączni. Raf był jego prawą ręką i sumieniem. Razem odkryli sekrety, które powinny pozostać ukryte.</li>
+                    <li><strong>Dziadek Emmy:</strong> Choć oficjalnie uchodził za surowego generała, dla małej Emmy był jedyną ostoją ciepła. To on zaszczepił w niej miłość do inżynierii.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">⚠ TAJNE ARCHIWA: SZANTAŻ</button>
+            <div class="panel">
+                <p>
+                    Jan nie zaginął przypadkiem. Został zmuszony do milczenia i usunięcia się w cień przez <strong>Astelię</strong> (matkę Emmy, Awatara Nienawiści).
+                </p>
+                <ul>
+                    <li><strong>Strażnik Bramy:</strong> Astelia odkryła, że Jan zna sposób na trwałe zamknięcie bram do Khan'den. To zrujnowałoby jej plany.</li>
+                    <li><strong>Ultimatum:</strong> Zagroziła, że jeśli Jan ujawni prawdę lub spróbuje zamknąć bramę, ona zabije Emmę.</li>
+                    <li><strong>Ofiara:</strong> Jan wybrał życie wnuczki ponad bezpieczeństwo świata. Utrzymywał Bramę w stanie "półotwartym", co pozwalało na inwazje bestii, ale chroniło Emmę.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">POZOSTAWIONE ŚLADY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Pamiętniki:</strong> Ukrył w ruinach starej kopalni zapiski, które mogą pomóc bohaterom zrozumieć naturę Bóstw i Khan'den.</li>
+                    <li><strong>Wpływ na Verta:</strong> Król Ernoyi szanował Jana jako jedynego "człowieka z Zavr", który rozumiał wojnę tak jak on.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Prawdziwa odwaga to nie walka z potworem. <br>
+                Prawdziwa odwaga to spojrzenie w oczy własnemu dziecku i milczenie, gdy serce krzyczy o prawdę.”
+            </div>
+
+            <a href="postacie_drugoplanowe.html" class="back-btn">← WRÓĆ DO POSTACI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="assets/jan.png" alt="Jan Henserker">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Ranga</td><td class="infobox-value">Generał Ekspedycyjny</td></tr>
+                <tr><td class="infobox-label">Rodzina</td><td class="infobox-value">Emma (Wnuczka)</td></tr>
+                <tr><td class="infobox-label">Przyjaciel</td><td class="infobox-value">Raf (Ojciec Cade'a)</td></tr>
+                <tr><td class="infobox-label">Wróg</td><td class="infobox-value" style="color:#a93226;">Astelia (Szantażystka)</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Zaginiony / † Pamięć</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">POWIĄZANIA</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">BRAT BRONI</div>
+                <a href="raf.html">
+                    Raf
+                    <span style="display:block; font-size:0.75rem; color:#f9e79f; font-weight:400;">Jedyny, któremu ufał.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">RODZINA</div>
+                <a href="emma.html">
+                    Emma
+                    <span style="display:block; font-size:0.75rem; color:#d4e6f1; font-weight:400;">Jego oczko w głowie.</span>
+                </a>
+                <a href="astelia.html">
+                    Astelia
+                    <span style="display:block; font-size:0.75rem; color:#a93226; font-weight:400;">Córka i Kat.</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

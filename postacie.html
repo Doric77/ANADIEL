@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Baza Postaci</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- BAZA --- */
+        body {
+            background-color: #050505;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0, 0, 0, 0.8)), 
+                url('assets/tlo2.png'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: rgb(251, 255, 0);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- NAGŁÓWEK --- */
+        header {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 5px;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* --- GRID GŁÓWNY (HEROSI) --- */
+        .char-grid {
+            display: grid;
+            /* ZMIANA: Zmniejszyłem minmax do 200px, żeby 6 osób weszło w jednej linii */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; /* Mniejszy odstęp między kartami */
+            max-width: 1600px; /* Szerszy kontener na 6 osób */
+            width: 95%;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 60px;
+        }
+
+        /* --- KARTA POSTACI --- */
+        .char-card {
+            position: relative;
+            height: 450px;
+            background: #000000;
+            border: 1px solid #333;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.4s ease;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+        }
+
+        /* MEDIA & ANIMACJE */
+        .media-container {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            transition: transform 0.6s ease;
+        }
+
+        .card-img {
+            width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;
+            filter: grayscale(30%) brightness(0.8);
+            transition: 0.4s;
+        }
+
+        .card-video {
+            width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;
+            opacity: 0; transition: opacity 0.5s ease;
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .card-info {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 20px 15px; /* Trochę mniejszy padding */
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            z-index: 5; pointer-events: none;
+        }
+
+        .char-name {
+            font-family: 'Cinzel', serif; font-size: 1.5rem; /* Dopasowana czcionka */
+            font-weight: 900;
+            color: #fff; text-transform: uppercase; margin: 0; transition: 0.3s;
+        }
+
+        .char-role {
+            font-size: 0.8rem; color: #aaa; margin-top: 5px; font-weight: 600; letter-spacing: 1px;
+        }
+
+        /* HOVER EFFECTS */
+        .char-card:hover { transform: translateY(-10px); z-index: 10; } /* Z-index żeby karta wyszła na wierzch */
+        .char-card:hover .media-container { transform: scale(1.1); }
+        .char-card:hover .card-video { opacity: 1; }
+        .char-card:hover .card-img { opacity: 0; }
+
+        /* KOLORY POSTACI */
+        .char-card.cade:hover { border-color: #9d00ff; box-shadow: 0 0 25px rgba(157, 0, 255, 0.4); }
+        .char-card.cade:hover .char-name { color: #9d00ff; text-shadow: 0 0 10px #9d00ff; }
+  .char-card.cade .card-img {
+            object-position: 40% center; /* To Twoje ustawienie, które jest OK */
+        }
+
+        /* 2. Ustawienie WIDEO (To, co wjeżdża) */
+        .char-card.cade .card-video {
+            /* ZMIENIAJ TĘ LICZBĘ, AŻ PRZESKOK ZNIKNIE! */
+            /* Jeśli film skacze w prawo -> zmniejsz (np. 35% lub 30%) */
+            /* Jeśli film skacze w lewo -> zwiększ (np. 45% lub 50%) */
+            object-position: 43% center; 
+        }
+        
+        .char-card.lyra:hover { border-color: #2ecc71; box-shadow: 0 0 25px rgba(46, 204, 113, 0.4); }
+        .char-card.lyra:hover .char-name { color: #2ecc71; text-shadow: 0 0 10px #2ecc71; }
+
+        .char-card.archtos:hover { border-color: #f1c40f; box-shadow: 0 0 25px rgba(241, 196, 15, 0.4); }
+        .char-card.archtos:hover .char-name { color: #f1c40f; text-shadow: 0 0 10px #f1c40f; }
+ .char-card.archtos .card-img {
+            object-position: 40% center; /* To Twoje ustawienie, które jest OK */
+        }
+        .char-card.archtos .card-video {
+            /* ZMIENIAJ TĘ LICZBĘ, AŻ PRZESKOK ZNIKNIE! */
+            /* Jeśli film skacze w prawo -> zmniejsz (np. 35% lub 30%) */
+            /* Jeśli film skacze w lewo -> zwiększ (np. 45% lub 50%) */
+            object-position: 43% center; 
+        }
+        .char-card.emma:hover { border-color: #00d2ff; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); }
+        .char-card.emma:hover .char-name { color: #00d2ff; text-shadow: 0 0 10px #00d2ff; }
+  .char-card.emma .card-img {
+            object-position: 40% center; /* To Twoje ustawienie, które jest OK */
+        }
+
+        /* 2. Ustawienie WIDEO (To, co wjeżdża) */
+        .char-card.emma .card-video {
+            /* ZMIENIAJ TĘ LICZBĘ, AŻ PRZESKOK ZNIKNIE! */
+            /* Jeśli film skacze w prawo -> zmniejsz (np. 35% lub 30%) */
+            /* Jeśli film skacze w lewo -> zwiększ (np. 45% lub 50%) */
+            object-position: 43% center; 
+        }
+        
+        .char-card.evie:hover { border-color: #ff9f43; box-shadow: 0 0 25px rgba(255, 159, 67, 0.4); } 
+        .char-card.evie:hover .char-name { color: #ff9f43; text-shadow: 0 0 10px #ff9f43; }
+/* --- KOREKTA PRECYZYJNA DLA EVIE --- */
+        
+        /* 1. Ustawienie ZDJĘCIA (To, co widzisz na start) */
+        .char-card.evie .card-img {
+            object-position: 40% center; /* To Twoje ustawienie, które jest OK */
+        }
+
+        /* 2. Ustawienie WIDEO (To, co wjeżdża) */
+        .char-card.evie .card-video {
+            /* ZMIENIAJ TĘ LICZBĘ, AŻ PRZESKOK ZNIKNIE! */
+            /* Jeśli film skacze w prawo -> zmniejsz (np. 35% lub 30%) */
+            /* Jeśli film skacze w lewo -> zwiększ (np. 45% lub 50%) */
+            object-position: 43% center; 
+        }
+        
+        
+        .char-card.kaelix:hover { border-color: #e74c3c; box-shadow: 0 0 25px rgba(231, 76, 60, 0.4); } 
+        .char-card.kaelix:hover .char-name { color: #e74c3c; text-shadow: 0 0 10px #e74c3c; }
+  .char-card.kaelix .card-img {
+            object-position: 35% center; /* To Twoje ustawienie, które jest OK */
+        }
+
+        /* 2. Ustawienie WIDEO (To, co wjeżdża) */
+        .char-card.kaelix .card-video {
+            /* ZMIENIAJ TĘ LICZBĘ, AŻ PRZESKOK ZNIKNIE! */
+            /* Jeśli film skacze w prawo -> zmniejsz (np. 35% lub 30%) */
+            /* Jeśli film skacze w lewo -> zwiększ (np. 45% lub 50%) */
+            object-position: 40% center; 
+        }
+        
+
+       /* --- SEKCJA KATEGORII (DOLNY GRID) --- */
+        .categories-title {
+            font-family: 'Cinzel', serif;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-align: center;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 50px;
+            margin-top: 20px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            width: 90%;
+            margin-bottom: 80px;
+        }
+
+        /* STYL KAFELKA - WERSJA BEZ CZARNYCH PASÓW */
+        .category-tile {
+            background-color: #101010;
+            
+            /* KLUCZOWE ZMIANY DLA PEŁNEGO WYPEŁNIENIA: */
+            background-position: center center !important; /* Zawsze środek */
+            
+            /* Startujemy od 120% (lekki zoom), żeby uciąć ewentualne puste paski */
+            background-size: 120%; 
+            background-repeat: no-repeat;
+            
+            border: 1px solid #333;
+            padding: 25px;
+            text-align: center;
+            text-decoration: none;
+            
+            transition: background-size 0.6s ease, transform 0.3s, border-color 0.3s, filter 0.3s;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 140px;
+            position: relative;
+            overflow: hidden;
+            
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        }
+
+        .category-tile h3 {
+            font-family: 'Cinzel', serif;
+            color: #e0e0e0;
+            margin: 0;
+            font-size: 1rem;
+            z-index: 2;
+            font-weight: 900;
+            pointer-events: none;
+        }
+
+        .category-tile span {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 5px;
+            z-index: 2;
+            font-weight: 600;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        /* EFEKT HOVER */
+        .category-tile:hover {
+            border-color: #9d00ff;
+            
+            /* Powiększamy ze 120% na 130% - płynny ruch, zero czarnych pasów */
+            background-size: 130%; 
+            
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            filter: brightness(1.2);
+        }
+        
+        .category-tile:hover h3 { 
+            color: #fff;
+            text-shadow: 0 0 10px #9d00ff; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Drużyna (obecni i byli )</h1>
+        <div class="subtitle">Zjednoczeni z przypadku</div>
+    </header>
+
+    <div class="char-grid">
+<a href="archtos.html" class="char-card archtos">
+            <div class="media-container">
+                <img src="assets/archtos_main.png" class="card-img" alt="Archtos">
+                <video class="card-video" loop playsinline><source src="assets/archtos.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">ARCHTOS</h2><div class="char-role">PALADYN</div></div>
+        </a>
+       
+
+        <a href="lyra.html" class="char-card lyra">
+            <div class="media-container">
+                <img src="assets/lyra_main.png" class="card-img" alt="Lyra">
+                <video class="card-video"  loop playsinline><source src="assets/lyra.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">LYRA</h2><div class="char-role">DRUIDKA</div></div>
+        </a>
+
+        <a href="cade.html" class="char-card cade">
+            <div class="media-container">
+                <img src="assets/cade_main.png" class="card-img" alt="Cade">
+                <video class="card-video"  loop playsinline><source src="assets/cade.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">CADE</h2><div class="char-role">ZABÓJCA</div></div>
+        </a>
+
+
+        <a href="emma.html" class="char-card emma">
+            <div class="media-container">
+                <img src="assets/emma_main.png" class="card-img" alt="Emma">
+                <video class="card-video"  loop playsinline><source src="assets/emma.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">EMMA</h2><div class="char-role">INŻYNIERKA</div></div>
+        </a>
+
+        
+
+        <a href="kaelix.html" class="char-card kaelix">
+            <div class="media-container">
+                <img src="assets/kaelix_main.png" class="card-img" alt="Kaelix">
+                <video class="card-video"  loop  playsinline><source src="assets/kaelix.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">KAELIX</h2><div class="char-role">BARD</div></div>
+        </a>
+ <a href="evie.html" class="char-card evie">
+            <div class="media-container">
+                <img src="assets/evie_main.png" class="card-img" alt="Evie">
+                <video class="card-video"  loop playsinline><source src="assets/evie.mp4" type="video/mp4"></video>
+            </div>
+            <div class="card-info"><h2 class="char-name">EVIE</h2><div class="char-role">ŁOWCZYNI</div></div>
+        </a>
+    </div>
+
+
+    <div class="categories-title">ARCHIWUM ŚWIATA</div>
+    
+   <div class="category-grid">
+        
+        <a href="antagonisci.html" class="category-tile" 
+           style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/i1.png');">
+            <h3>ANTAGONIŚCI</h3>
+            <span>Wrogowie i zagrożenia</span>
+        </a>
+
+        <a href="wladcy.html" class="category-tile" 
+           style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/i2.png');">
+            <h3>WŁADCY</h3>
+            <span>Polityka i decyzje</span>
+        </a>
+
+        <a href="postacie_drugoplanowe.html" class="category-tile" 
+           style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/i3.png');">
+            <h3>DRUGOPLANOWE</h3>
+            <span>Kontakty i mentorzy</span>
+        </a>
+
+        <a href="byty.html" class="category-tile" 
+           style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/i4.png');">
+            <h3>BYTY WYŻSZE</h3>
+            <span>Bogowie i Demony</span>
+        </a>
+
+        <a href="historia_postaci.html" class="category-tile" 
+           style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/i5.png');">
+            <h3>HISTORIA</h3>
+            <span>Legendy i martwi</span>
+        </a>
+
+    </div>
+
+    <a href="index.html" class="back-home">← WRÓĆ DO EKRANU GŁÓWNEGO</a>
+
+   <script>
+        const cards = document.querySelectorAll('.char-card, .char-card-small'); // Łapie duże i małe karty
+
+        cards.forEach(card => {
+            const video = card.querySelector('video');
+
+            if (video) {
+                // Ustawiamy głośność na 50% (żeby nie ogłuszyło)
+                video.volume = 0.5; 
+
+                card.addEventListener('mouseenter', () => {
+                    // Resetujemy czas do 0
+                    video.currentTime = 0;
+                    
+                    // Próbujemy odpalić film z dźwiękiem
+                    var playPromise = video.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            // Udało się! Odtwarzamy.
+                        })
+                        .catch(error => {
+                            // Przeglądarka zablokowała dźwięk (bo użytkownik jeszcze nie kliknął strony)
+                            console.log("Dźwięk zablokowany - kliknij w stronę, by odblokować audio!");
+                        });
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0; // Przewiń do początku
+                });
+            }
+        });
+        
+        // --- BONUS ---
+        // Skrypt dla małych kafelków (kategorii) też może mieć dźwięk, jeśli dodasz tam <audio> w przyszłości
+    </script>
+
+</body>
+</html>

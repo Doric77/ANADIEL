@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Simon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA SIMONA (CEGŁA / DREWNO / LOJALNOŚĆ) --- */
+        :root {
+            --accent: #922b21;                 /* Ceglasta Czerwień */
+            --accent-dark: #641e16;            /* Ciemny brąz */
+            --accent-glow: rgba(146, 43, 33, 0.3);
+            
+            --bg-panel: rgba(25, 20, 15, 0.95); /* Ciepły, ciemny panel */
+            --text-primary: #d5d8dc;
+            
+            --border-color: rgba(146, 43, 33, 0.3);
+        }
+
+        /* --- BAZA I TŁO (ZOPTYMALIZOWANE) --- */
+        body {
+            background-color: #0c0505;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(20, 10, 5, 0.1)), 
+                url('assets/simon_tlo.png');
+            background-size: cover;
+            background-position: center;
+            
+            filter: blur(0px); 
+            transform: scale(1.05);
+            will-change: transform;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(146, 43, 33, 0.05);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(146, 43, 33, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 20px; color: #e6b0aa;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #1a1010, #0f0505); 
+            color: #d98880;
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #333; border-left: 4px solid #501010;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #2b1515;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(15, 10, 10, 0.6);
+            border: 1px solid #333; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #aaa; padding: 30px 20px; margin-top: 20px;
+            border-top: 1px solid var(--accent);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease; filter: sepia(0.2) contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.02); filter: none; }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(30, 20, 20, 0.8);
+            border: 1px solid #333;
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid #333; }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(30, 20, 20, 0.8); padding: 20px;
+            border: 1px solid #333;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #e6b0aa; text-decoration: none;
+            padding: 5px 0; transition: 0.2s;
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #888;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #444; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(146, 43, 33, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>SIMON</h1>
+
+            <div class="logline">
+                Wódz Wilczego Dworu, Lewa Ręka Króla i człowiek, któremu Vert powierzył swój dom. 
+                Gdy Król rządzi krajem, Simon pilnuje serca Ernoyi, dbając, by ogień w paleniskach nigdy nie zgasł, a topory były zawsze ostre.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Atrybut:</strong> Hełm z dwoma rogami.</li>
+                    <li><strong>Styl:</strong> Praktyczny skórzany pancerz, narzucone futro. Wygląda bardziej na doświadczonego łowcę niż arystokratę.</li>
+                    <li><strong>Zachowanie:</strong> Spokojny, metodyczny. W chaosie Wilczego Dworu (pełnym wilkołaków i wojowników) jest oazą porządku.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: ZARZĄDCA DWORU</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Awans:</strong> Walczył u boku Verta podczas rewolucji. Gdy Vert został Królem Ernoyi i musiał zająć się polityką państwa, mianował Simona wodzem ich rodowitego klanu.</li>
+                    <li><strong>Zadania:</strong> Zarządza obroną twierdzy, logistyką armii i mediacjami między ludźmi a wilkołakami wewnątrz Dworu.</li>
+                    <li><strong>Ciężar:</strong> Czuje presję zastępowania legendy. Wie, że każdy porównuje go do Verta.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">WIĘZY KRWI I STALI</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Król Vert:</strong> Jego władca i przyjaciel. Simon jest jedną z niewielu osób, które mogą powiedzieć Królowi, że się myli, nie tracąc przy tym głowy.</li>
+                    <li><strong>Ulvak:</strong> Szanują się, choć Simon często musi sprzątać bałagan po "rozrywkach" watahy Ulvaka.</li>
+                    <li><strong>Podwładni:</strong> Jest surowy, ale sprawiedliwy. Zyskał szacunek żołnierzy nie tytułem, ale wspólną walką w okopach.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Vert zdobył koronę mieczem. Moim zadaniem jest sprawić, by nie spadła mu z głowy, gdy on patrzy w przyszłość.”
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="assets/simon.png" alt="Simon">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Tytuł</td><td class="infobox-value" style="color:#922b21;">WÓDZ WILCZEGO DWORU</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">Nieznany</td></tr>
+                <tr><td class="infobox-label">Rasa</td><td class="infobox-value">Człowiek</td></tr>
+                <tr><td class="infobox-label">Przełożony</td><td class="infobox-value">Król Vert</td></tr>
+                <tr><td class="infobox-label">Specjalizacja</td><td class="infobox-value">Taktyka / Logistyka</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Zaufany</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">LOJALNOŚĆ</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">WŁADCA</div>
+                <a href="vert.html">
+                    Król Vert
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">Brat broni i suweren / Wspólne polowania i łowienie ryb.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">SOJUSZNIK</div>
+                <a href="ulvak.html">
+                    Ulvak
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">Potężny gracz.</span>
+                </a>
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">MIŁOŚĆ</div>
+                <a href="melia.html">
+                    Melia
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">To skomplikowane...</span>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

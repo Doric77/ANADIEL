@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Emma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA EMMY (TECHNOLOGIA/KETA) --- */
+        :root {
+            --accent: #00d2ff;                 /* Elektryczny błękit */
+            --accent-dark: #0077b3;            /* Ciemny błękit */
+            --accent-glow: rgba(0, 210, 255, 0.3); /* Poświata plazmowa */
+            
+            --bg-main: #0a0e14;                /* Granatowa czerń */
+            --bg-panel: rgba(20, 25, 35, 0.85);
+            --bg-element: linear-gradient(to right, #141a25, #0f1218);
+            
+            --text-primary: #e0f7ff;           /* Chłodna biel */
+            --text-secondary: #90aab5;         /* Stalowy szary */
+            
+            --border-color: rgba(0, 210, 255, 0.25);
+            --spoiler: #ff3333;
+        }
+
+        /* --- BAZA I TŁO --- */
+      /* --- TŁO EMMY (TECHNOLOGIA/BŁĘKIT) --- */
+        body {
+            background: 
+                /* Delikatny gradient w odcieniach granatu */
+                linear-gradient(rgba(0,0,0,0.3), rgba(0, 20, 40, 0.7)), 
+                url('assets/emma_tlo.png');
+            
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            /* Efekt "Hologramu" - delikatne wewnętrzne świecenie */
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 25px rgba(0, 210, 255, 0.05);
+            padding: 40px;
+            border-radius: 4px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #fff;
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 25px var(--accent);
+            position: relative;
+        }
+
+        h1::after {
+            content: ''; display: block; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-top: 15px; opacity: 0.8;
+            box-shadow: 0 0 10px var(--accent); /* Świecąca linia */
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.25rem; font-weight: 500; font-style: italic;
+            background: linear-gradient(to right, var(--accent-glow), transparent);
+            border-left: 4px solid var(--accent);
+            padding: 25px; color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: var(--bg-element); color: var(--text-secondary);
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid var(--border-color); border-left: 4px solid #444;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 600;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: linear-gradient(to right, rgba(0, 210, 255, 0.15), rgba(20,30,40,0.5));
+            border-left: 4px solid var(--accent); color: #fff;
+            text-shadow: 0 0 10px var(--accent);
+            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.15);
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; transition: 0.3s; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(15, 20, 25, 0.6);
+            border: 1px solid var(--border-color); border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* STATUS FABULARNY (Ten sam kolor co reszta, ale wzmocniony) */
+        .status-header { border-left-color: #fff !important; } /* Biały pasek dla kontrastu */
+        .status-header:hover, .status-header.active { 
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(20,20,30,0.5));
+            text-shadow: 0 0 10px #fff;
+        }
+
+        /* SEKRETY */
+        .accordion.secret { border-color: var(--spoiler); color: var(--spoiler); opacity: 0.8; }
+        .accordion.secret:hover, .accordion.secret.active { 
+            opacity: 1; background: rgba(255, 50, 50, 0.1); border-left-color: var(--spoiler);
+            text-shadow: 0 0 10px var(--spoiler);
+        }
+        .accordion.secret.active::after { color: var(--spoiler); }
+
+        /* CYTAT STAŁY */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.5rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; position: relative;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+        }
+        .quote-static::before, .quote-static::after {
+            content: ''; display: block; height: 1px; width: 50%; margin: 20px auto;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        /* OBRAZEK 4:3 */
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 15px var(--accent-glow);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            border-radius: 4px;
+        }
+
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .char-image-container:hover img { transform: scale(1.03); }
+
+        /* INFOBOX */
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.95rem; background: rgba(20, 25, 35, 0.6);
+            border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;
+        }
+        .infobox td { padding: 15px; border-bottom: 1px solid rgba(0, 210, 255, 0.15); }
+        .infobox tr:last-child td { border-bottom: none; }
+        .infobox tr:hover { background: rgba(0, 210, 255, 0.05); }
+
+        .infobox-label { 
+            font-weight: 700; color: var(--accent); text-transform: uppercase; 
+            letter-spacing: 1px; font-size: 0.85rem; width: 40%;
+        }
+        .infobox-value { color: #fff; text-align: right; font-weight: 600; }
+
+        /* LINKI */
+        .related-links {
+            background: rgba(20, 25, 35, 0.6); padding: 25px;
+            border: 1px solid var(--border-color); border-radius: 4px;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+            margin-bottom: 15px; font-weight: 800; letter-spacing: 2px;
+        }
+        .related-links a {
+            display: block; color: var(--text-secondary); text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 500;
+        }
+        .related-links a:hover { 
+            color: #fff; padding-left: 10px; border-bottom: 1px solid var(--accent);
+            text-shadow: 0 0 5px var(--accent);
+        }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px;
+        }
+        .back-btn:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; padding: 20px; }
+            .sidebar { order: -1; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>EMMA</h1>
+
+            <div class="logline">
+                Genialna wynalażczyni ,której umysł wyprzeda epokę.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Gesty:</strong> Nerwowe poprawianie gogli na czole. Stukanie palcami w metalowe powierzchnie.</li>
+                    <li><strong>Ruch:</strong> Szybki, chaotyczny, chce robić wszystko naraz.</li>
+                    <li><strong>Mowa:</strong> Mówi bardzo szybko, używa technicznego żargonu, po czym macha ręką i mówi "Nieważne, zadziała".</li>
+                </ul>
+            </div>
+
+            <button class="accordion">WYGLĄD I GADŻETY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Sylwetka:</strong> Drobna, ale obwieszona pasami z narzędziami.</li>
+                    <li><strong>Twarz:</strong> Delikatna ,czasem ubrudzona smarem, niebieskie błyskawicowe oczy.Krótkie włosy latające swopobnie.</li>
+                    <li><strong>Strój:</strong> Biała koszula, szelki ,lubi spodnie typu ogrodniczki, na włosach zawsze gogle, często chodzi w skórzanych rękawicach.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">OSOBOWOŚĆ</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Dominujące:</strong> Intelekt, entuzjazm poznawczy, złote serce.</li>
+                    <li><strong>Sprzeczność:</strong> Jest geniuszem technologii, ale kompletnie gubi się w relacjach społecznych.</li>
+                    <li><strong>Styl bycia:</strong> Zbyt skromna ,tworzy cuda ,ale nie uznaje ich za nic wyjątkowego.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">MOTYWACJE I LĘKI</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Cel krótki:</strong> Odpokutować za kradzież samochodu.</li>
+                    <li><strong>Cel długi:</strong> Udowodnić matce ,że się myli, przeżyć w piekle.</li>
+                    <li><strong>Największy lęk:</strong> Boi się ,że całe życie będzie samotna.</li>
+                    <li><strong>Cena graniczna:</strong> Wybucha w finale zamykając 4 krąg piekła ,Damaela'.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">KONFLIKT WEWNĘTRZNY</button>
+            <div class="panel">
+                <p>
+                    Emma kocha postęp, ale widzi, jak niszczy on świat (smog Zavr, broń Inu). Walczy o to, by technologia służyła życiu, a nie tylko wojnie, mimo że sama tworzy narzędzia zniszczenia.
+                </p>
+            </div>
+
+            <button class="accordion">KOMPETENCJE I OGRANICZENIA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Inżynieria:</strong> Poziom Mistrzowski. Naprawi wszystko, od tostera po mecha-smoka.</li>
+                    <li><strong>Emmulator:</strong> Oddała go za lepsze życie.</li>
+                    <li><strong>Walka:</strong> Niska. Polega na inteligencji.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">RELACJE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Cade:</strong> Traktuje go jak "projekt badawczy" (fascynacja jego magią), ale szczerze go lubi.</li>
+                    <li><strong>Archtos:</strong> Uważała go za gbura ,choć w głębi bardzo go lubiła ,za późno zrozumiała kim on dla niej chciał być.</li>
+                    <li><strong>Lyra:</strong> Uwielbia jej radość z życia ,jest jedyną osobą ,której pozwala sobie mówić ,Emka'.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">EKWIPUNEK KLUCZOWY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Samozapała:</strong> Rękawica która działa jak zapalniczka</li>
+                    <li><strong>Gogle :</strong>Chronią oczy podczas pracy.</li>
+                    <li><strong>Naszyjnik z zębatką:</strong>Symbolizuje jej ,że pochodzi z Wetów.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY (BIEŻĄCY)</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong>Piekło krąg Damael</li>
+                    <li><strong>Stan:</strong> Zaginiona/martwa</li>
+                    <li><strong>Zadanie:</strong> ???</li>
+                </ul>
+            </div>
+
+            <button class="accordion secret">⚠ SEKRETY (TYLKO DLA AUTORA)</button>
+            <div class="panel">
+                <ul>
+                    <li>Jej matka to awatar boga nienawiści ,to jedyny powód dla którego może przeżyć wybuch.</li>
+                    <li>Gdy Emma myślała ,że jej dziadek nie żyje ,to żył ,a gdy myśli ,że jej dziadek żyje ,jest martwy.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Magia to po prostu nauka, której jeszcze nie opisaliśmy równaniami.<br>
+                Daj mi klucz, a naprawię nawet przeznaczenie.”
+            </div>
+
+            <a href="postacie.html" class="back-btn">← WRÓĆ DO BAZY POSTACI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="assets/emma_main.png" alt="Emma - Portret">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Zaginiona</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">19 lat</td></tr>
+                <tr><td class="infobox-label">Rasa</td><td class="infobox-value">Człowiek</td></tr>
+                <tr><td class="infobox-label">Pochodzenie</td><td class="infobox-value">Zavr (Wety)</td></tr>
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Mózg / Tech</td></tr>
+                <tr><td class="infobox-label">Specjalizacja</td><td class="infobox-value">Inżynieria<br>Szybkie myślenie</td></tr>
+                <tr><td class="infobox-label">Debiut</td><td class="infobox-value">Rozdział IV</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">SIECI POWIĄZAŃ</div>
+                
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:10px; opacity:0.8;">BLISCY / KLUCZOWI</div>
+                
+                <a href="cade.html">
+                    Cade
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Widzi w nim lidera ,za którym podąży.</span>
+                </a>
+                
+                <a href="lyra.html">
+                    Lyra
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Przyjaciółka i zagadka.</span>
+                </a>
+                    <a href="archtos.html">
+                    Archtos
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Żałuje ,że go odpychała</span>
+                </a>
+                  <a href="frank.html">
+                    Frank
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Tęskni za ojcem</span>
+                </a>
+
+
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">NAPIĘCIA</div>
+                
+                <a href="kaelix.html">
+                    Kaelix
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Nie rozumie dlaczego jej to zrobił</span>
+                </a>
+                <a href="astelia.html">
+                    Astelia
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Sprawia jej przykrość i nią gardzi</span>
+                </a>
+
+
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">WROGOWIE</div>
+                
+                <a href="feliks.html">
+                    Feliks
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Myślała ,że ją kocha ,a on ją wysadził</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

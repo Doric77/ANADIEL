@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Pera</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA PERY (TURKUS / BASTION / SZTORM) --- */
+        :root {
+            --accent: #1abc9c;                 /* Morski Turkus */
+            --accent-dark: #0e6251;            /* Głęboka toń */
+            --accent-glow: rgba(26, 188, 156, 0.4);
+            
+            --bg-panel: rgba(15, 25, 25, 0.95);
+            --text-primary: #e8f8f5;
+            
+            --border-color: rgba(26, 188, 156, 0.3);
+        }
+
+        /* --- BAZA I TŁO (ZOPTYMALIZOWANE) --- */
+        body {
+            background-color: #050a0a;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(5, 20, 20, 0.1)), 
+                url('assets/pera_tlo.png');
+            background-size: cover;
+            background-position: center;
+            
+            filter: blur(0px); 
+            transform: scale(1.05);
+            will-change: transform;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(26, 188, 156, 0.05);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(26, 188, 156, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 20px; color: #d1f2eb;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #0b1414, #050a0a); 
+            color: #a3e4d7;
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #2e4053; border-left: 4px solid #145a32;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #112020;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(10, 15, 15, 0.6);
+            border: 1px solid #2e4053; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* STATUS FABULARNY */
+        .status-header { border-left-color: #48c9b0 !important; }
+
+        /* SEKRETY */
+        .accordion.redacted { opacity: 0.8; color: #76d7c4; font-family: 'Cinzel', serif; }
+        .redacted-text {
+            text-align: center; padding: 20px;
+            color: #a2d9ce; background: rgba(26, 188, 156, 0.1); 
+            font-style: italic; border: 1px dashed var(--accent);
+        }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #aaa; padding: 30px 20px; margin-top: 20px;
+            border-top: 1px solid var(--accent);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease; filter: contrast(1.1) brightness(0.9);
+        }
+        .char-image-container:hover img { transform: scale(1.02); filter: none; }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(15, 30, 30, 0.8);
+            border: 1px solid #2e4053;
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid #2e4053; }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(15, 30, 30, 0.8); padding: 20px;
+            border: 1px solid #2e4053;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid #48c9b0; padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #a3e4d7; text-decoration: none;
+            padding: 5px 0; transition: 0.2s;
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #a3e4d7;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #145a32; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(26, 188, 156, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>PERA</h1>
+
+            <div class="logline">
+                Dowódczyni Kaedran, zwanego "Pierwszym Bastionem". Kobieta, która stoi na krawędzi świata.
+                Odpowiada za to, by koszmary z Khan'den nie przekroczyły morza i nie dotarły do Dor'Nadyr.
+                Dla niej reszta świata to "miękkie podbrzusze", które ona musi osłaniać.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wzrok:</strong> Rzadko patrzy na rozmówcę – jej oczy nieustannie skanują niebo i horyzont. Cierpi na zawodowe zboczenie wartownika.</li>
+                    <li><strong>Wygląd:</strong> Smagana wiatrem skóra, włosy czarne rozpuszczone. Jej pancerz nosi ślady kwasu i pazurów.</li>
+                    <li><strong>Atrybut:</strong> Ciężka Czarny Łuk – broń zaprojektowana do strącania latających bestii.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: TARCZA NIEBIOS</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Obrona Przeciwlotnicza:</strong> Kaedran to forteca naszpikowana artylerią. Pera dowodzi bateriami, które strącają stwory próbujące przylecieć z Khan'den.</li>
+                    <li><strong>Selekcja:</strong> Jest bezwzględna. Jej Forteca osłania południowe wybrzeże kontynentu ,miejsce najczęstszych ataków besti.</li>
+                    <li><strong>Dyscyplina:</strong> Dowodzi armiami z innych krajów wysyłanych jej do obrony. W Kaedran panuje prawo wojenne.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">IZOLACJA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Władcy Kontynentu:</strong> Pracuje dla nich za ogromne pieniądze, jednak nie są dla niej najważniejsze.</li>
+                    <li><strong>Stoneheart:</strong> Szanuje go, bo dostarcza jej nowych ludzi. Wie ,że wsparcie zawsze dotrze.</li>
+                    <li><strong>Żołnierze:</strong> Jest dla nich matką i katem. Wiedzą, że pod jej dowództwem mają największe szanse na przeżycie.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong> Forteca Kaedran (Wybrzeże).</li>
+                    <li><strong>Stan:</strong> Spokojna ,od zamknięcia Demaela bardzo żadko Khan'Den coś "wylewa"</li>
+                    <li><strong>Zagrożenie:</strong> Uważa ,że to cisza przed burzą.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">⚠ WIEDZA NIEWYJAŚNIONA</button>
+            <div class="panel">
+                Nie rozumie jak armie smoków znalazły się na wojnie ,nic nie przylatywało nad Khan'Den , musiały polecieć od pólnocy przez góry Ernoyi gdzie nigdzie nic nie latało.
+                Jest matką Evie.
+                <div class="redacted-text">
+                    
+                </div>
+            </div>
+
+            <div class="quote-static">
+                „Umrzeć na wojnie to dobra śmierć.”
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="assets/pera.png" alt="Pera">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Ranga</td><td class="infobox-value" style="color:#1abc9c;">DOWÓDCA</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">Nieznany</td></tr>
+                <tr><td class="infobox-label">Frakcja</td><td class="infobox-value">Kaedran (Niezależna)</td></tr>
+                <tr><td class="infobox-label">Zadanie</td><td class="infobox-value">Obrona Granic</td></tr>
+                <tr><td class="infobox-label">Wróg</td><td class="infobox-value">Khan'den</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">KONTAKY</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">ZAOPATRZENIE</div>
+                <a href="stoneheart.html">
+                    Profesor Stoneheart
+                    <span style="display:block; font-size:0.75rem; color:#a3e4d7; font-weight:400;">Dostawca wojsk.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">ZAGROŻENIE</div>
+                <a href="#">
+                    Rój z Khan'den
+                    <span style="display:block; font-size:0.75rem; color:#76d7c4; font-weight:400;">Cel nr 1.</span>
+
+                </a>
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">RODZINA</div>
+                <a href="hugrim.html">
+                    Hugrim
+                    <span style="display:block; font-size:0.75rem; color:#76d7c4; font-weight:400;">Były mąż</span>
+            
+            
+                <a href="evie.html">
+                    Evie
+                    <span style="display:block; font-size:0.75rem; color:#76d7c4; font-weight:400;">Córka</span>
+            </div>
+
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

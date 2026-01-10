@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANADIEL - Wiki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* TŁO I PODSTAWY */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Raleway', sans-serif;
+            color: white;
+            text-align: center;
+
+            /* Pamiętaj o zdjęciu w folderze assets! */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('assets/tlo.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* TYTUŁ GŁÓWNY */
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 80px;
+            letter-spacing: 12px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            cursor: default;
+        }
+
+        /* KOLORY LITER TYTUŁU */
+        .litera-1 { color: #d699ff; text-shadow: 0 0 25px #d699ff; }
+        .litera-2 { color: #b366ff; }
+        .litera-3 { color: #8c1aff; }
+        .litera-4 { color: #6600cc; }
+        .litera-5 { color: #400080; }
+        .litera-6 { color: #26004d; }
+        .litera-7 { color: #05000a; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
+
+        /* NOWY OPIS */
+        .opis {
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 900px; /* Szerokość tekstu */
+            padding: 0 20px;
+            text-shadow: 2px 2px 4px black; /* Cień pod tekstem dla lepszej czytelności */
+            font-weight: 500;
+        }
+
+        /* KOLORY IMION */
+        .imie-cade { 
+            color: #9d00ff; /* Fiolet */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(157, 0, 255, 0.4);
+        }
+        
+        .imie-lyra { 
+            color: #2ecc71; /* Soczysta zieleń */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        }
+
+        .imie-archtos { 
+            color: #f1c40f; /* Złoty żółty */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+        }
+
+        .imie-emma { 
+            color: #00d2ff; /* Błyskawiczny błękit */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        /* MENU / PRZYCISKI */
+        .menu {
+            margin-top: 50px;
+        }
+
+        .przycisk {
+            color: #d699ff;
+            text-decoration: none;
+            border: 1px solid #d699ff;
+            padding: 12px 30px;
+            margin: 0 15px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            background: rgba(0,0,0,0.5); /* Lekkie tło przycisku */
+        }
+
+        .przycisk:hover {
+            background-color: #d699ff;
+            color: black;
+            box-shadow: 0 0 20px #d699ff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>
+        <span class="litera-1">A</span><span class="litera-2">N</span><span class="litera-3">A</span><span class="litera-4">D</span><span class="litera-5">I</span><span class="litera-6">E</span><span class="litera-7">L</span>
+    </h1>
+
+    <div class="opis">
+        „Wkrocz do Soltharii – świata, gdzie ryk maszyn parowych miesza się z szeptem starej magii, 
+        a z mroku Khan'Den wyłaniają się zapomniane koszmary. 
+        Poznaj historię 
+        <span class="imie-cade">Cade'a</span>, 
+        <span class="imie-lyra">Lyry</span>, 
+        <span class="imie-archtos">Archtosa</span> i 
+        <span class="imie-emma">Emmy</span>, 
+        którzy muszą stawić czoła piekłu, zanim to pochłonie wszystko, co kochają.”
+    </div>
+
+    <div class="menu">
+        <a href="postacie.html" class="przycisk">POSTACIE</a>
+        <a href="lokacje.html" class="przycisk">LOKACJE</a>
+        <a href="bestiariusz.html" class="przycisk">BESTIARIUSZ</a>
+    </div>
+
+</body>
+</html>

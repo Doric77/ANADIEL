@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Inkantacje Agramanty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- BAZA --- */
+        :root {
+            --bg-panel: rgba(15, 15, 15, 0.95);
+            --text-primary: #fff;
+        }
+
+        /* 1. ZAMYKAMY SEKCJĘ BODY */
+        body {
+            background-color: #050505;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative; /* To jest ważne! */
+            overflow-x: hidden;
+        } /* <--- CZY TA KLAMRA TU JEST? */
+
+        /* 2. DOPIERO TERAZ OTWIERAMY BODY::BEFORE */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            z-index: -1; 
+
+            /* Tło */
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
+                url('assets/smok_tlo.png');
+            background-size: cover;
+            background-position: center;
+
+            /* Rozmycie */
+            filter: blur(8px) brightness(0.6);
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- NAGŁÓWEK --- */
+        header { text-align: center; margin-bottom: 50px; }
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: #fff;
+            margin: 0 0 10px 0; letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.4);
+        }
+        .subtitle {
+            font-size: 1.2rem; color: #aaa; letter-spacing: 3px;
+            font-family: 'Cinzel', serif; text-transform: uppercase;
+        }
+
+        /* --- GRID UKŁADU --- */
+        .dragon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-areas: 
+                ". top ."
+                "left mid right"
+                ". bot .";
+            gap: 30px;
+            align-items: center; justify-items: center;
+        }
+
+        /* --- STYL KARTY --- */
+        .head-card {
+            background: var(--bg-panel);
+            border: 2px solid #333;
+            width: 100%; max-width: 420px; min-height: 650px; /* Nieco wyższe na tekst */
+            display: flex; flex-direction: column;
+            overflow: hidden; transition: 0.3s;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .head-card:hover { transform: scale(1.02); z-index: 10; }
+
+        /* OBRAZEK */
+        .head-img-container {
+            width: 100%; height: 280px; overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .head-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s; filter: brightness(0.9);
+        }
+        .head-card:hover .head-img { transform: scale(1.05); filter: brightness(1.1); }
+
+        /* TREŚĆ */
+        .head-content { 
+            padding: 25px; 
+            display: flex; flex-direction: column; flex-grow: 1;
+            text-align: center;
+        }
+
+        .head-title {
+            font-family: 'Cinzel', serif; font-size: 2rem; margin: 0;
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px;
+        }
+        
+        /* ASPEKT I DEFINICJA */
+        .head-attribute {
+            font-size: 0.9rem; margin-bottom: 5px; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .aspect-def {
+            font-size: 0.7rem; color: #888; font-style: italic;
+            margin-bottom: 20px; font-family: 'Cinzel', serif;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+        }
+
+        /* OPIS I KONSEKWENCJE */
+        .head-desc {
+            font-size: 0.9rem; line-height: 1.6; color: #ccc; margin-bottom: 15px;
+            text-align: justify; text-align-last: center;
+        }
+        .failure-msg {
+            font-size: 0.8rem; color: #ff5555; font-style: italic; font-weight: 600;
+            margin-top: 10px; display: block;
+        }
+
+        /* STATYSTYKI */
+        .stats-box {
+            margin-top: auto; 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .stat-val { color: #fff; font-weight: 700; display: block; font-size: 0.85rem;}
+        .stat-label { color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* --- KOLORY --- */
+        #lewa { grid-area: left; border-color: #ff3333; box-shadow: 0 0 30px rgba(255, 51, 51, 0.15); }
+        #lewa .head-title { color: #ff3333; text-shadow: 0 0 15px #ff3333; }
+        
+        #gorna { grid-area: top; border-color: #2ecc71; box-shadow: 0 0 30px rgba(46, 204, 113, 0.15); }
+        #gorna .head-title { color: #2ecc71; text-shadow: 0 0 15px #2ecc71; }
+
+        #srodkowa { 
+            grid-area: mid; border-image: linear-gradient(to right, #ff3333, #3366ff) 1;
+            box-shadow: 0 0 40px rgba(100, 50, 255, 0.2);
+        }
+       /* 3. ŚRODKOWA (POPRAWIONY GRADIENT TEKSTU) */
+        #srodkowa .head-title { 
+            /* 1. Ustawiamy tło jako gradient (standardowa składnia 'to right') */
+            background: linear-gradient(to right, #ff3333, #3366ff);
+            
+            /* 2. Przycinamy tło do kształtu liter (standard + webkit dla kompatybilności) */
+            -webkit-background-clip: text;
+            background-clip: text;
+            
+            /* 3. Robimy litery przeźroczyste, żeby tło było widać */
+            color: transparent;
+            
+            font-weight: 900;
+        }
+
+        #dolna { grid-area: bot; border-color: #8d6e63; box-shadow: 0 0 30px rgba(141, 110, 99, 0.15); }
+        #dolna .head-title { color: #8d6e63; text-shadow: 0 0 15px #8d6e63; }
+
+        #prawa { grid-area: right; border-color: #ff66cc; box-shadow: 0 0 30px rgba(255, 102, 204, 0.15); }
+        #prawa .head-title { color: #ff66cc; text-shadow: 0 0 15px #ff66cc; }
+
+        /* MENU I POWRÓT */
+        .head-nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        .nav-btn {
+            background: rgba(0,0,0,0.5); border: 1px solid #444; color: #aaa;
+            padding: 10px 25px; text-decoration: none; font-family: 'Cinzel', serif;
+            font-size: 0.9rem; transition: 0.3s; text-transform: uppercase; font-weight: bold;
+        }
+        .nav-btn.red:hover { border-color: #ff3333; color: #ff3333; }
+        .nav-btn.green:hover { border-color: #2ecc71; color: #2ecc71; }
+        .nav-btn.mix:hover { border-color: #fff; background: linear-gradient(90deg, #ff3333, #3366ff); color: #fff; }
+        .nav-btn.brown:hover { border-color: #8d6e63; color: #8d6e63; }
+        .nav-btn.pink:hover { border-color: #ff66cc; color: #ff66cc; }
+
+        .back-home {
+            display: block; width: 200px; margin: 60px auto 20px auto; text-align: center;
+            text-decoration: none; color: #888; border: 1px solid #444; padding: 15px;
+            font-family: 'Cinzel', serif; transition: 0.3s;
+        }
+        .back-home:hover { border-color: #fff; color: #fff; letter-spacing: 2px; }
+
+        @media (max-width: 1100px) {
+            .dragon-grid { grid-template-columns: 1fr; grid-template-areas: "top" "left" "mid" "right" "bot"; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>INKANTACJE</h1>
+            <div class="subtitle">PIĘĆ GŁÓW. JEDNA WOLA.</div>
+            
+           
+        </header>
+
+        <div class="dragon-grid">
+
+            <div id="gorna" class="head-card">
+                <div class="head-img-container">
+                    <img src="assets/gorna.png" alt="Głowa Górna" class="head-img">
+                </div>
+                <div class="head-content">
+                    <h2 class="head-title">GÓRNA</h2>
+                    
+                    <div class="head-attribute" style="color:#2ecc71;">ASPEKT ODWAGI</div>
+                    <div class="aspect-def">Weryfikacja odwagi, ucieczka tu nic nie da.</div>
+                    
+                    <div class="head-desc">
+                       Głowa ,która pojawiła się jako pierwsza w świątyni zepsutego smoka , wypluwała z siebie grzybniaki ,które przy śmierci wybuchały kwasem.
+                        <span class="failure-msg">Tchórzostwo skutkuje spaleniem z kwasu grzybów.</span>
+                    </div>
+                    
+                    <div class="stats-box">
+                        <div><span class="stat-label">Żywioł</span><span class="stat-val">Ziemia/Kwas</span></div>
+                        <div><span class="stat-label">Charakter Próby</span><span class="stat-val">Zabij grzyby i głowe</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lewa" class="head-card">
+                <div class="head-img-container">
+                    <img src="assets/lewa.png" alt="Głowa Lewa" class="head-img">
+                </div>
+                <div class="head-content">
+                    <h2 class="head-title">LEWA</h2>
+                    
+                    <div class="head-attribute" style="color:#ff3333;">ASPEKT PRZEBIEGŁOŚCI</div>
+                    <div class="aspect-def">Test percepcji i zdolności odróżnienia prawdy od iluzji.</div>
+                    
+                    <div class="head-desc">
+                        Uosobienie zdrady i fałszywych obietnic. Daje nadzieje ,że nic się nie wydarzy ,po czym gdy ktoś  podejdzie za blisko ,pojawia się i spala ogniem
+                        <span class="failure-msg">Naiwność kończy się spaleniem.</span>
+                    </div>
+                    
+                    <div class="stats-box">
+                        <div><span class="stat-label">Żywioł</span><span class="stat-val">Ogień / Iluzja</span></div>
+                        <div><span class="stat-label">Charakter Próby</span><span class="stat-val">Nie daj się przechytrzyć</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="srodkowa" class="head-card">
+                <div class="head-img-container">
+                    <img src="assets/srodkowa.png" alt="Głowa Środkowa" class="head-img">
+                </div>
+                <div class="head-content">
+                    <h2 class="head-title">ŚRODKOWA</h2>
+                    
+                    <div class="head-attribute" style="color:#aaa;">ASPEKT POTĘGI</div>
+                    <div class="aspect-def">Zwykły człowiek nie jest w stanie tego Przeżyć.</div>
+                    
+                    <div class="head-desc">
+                       Główna głowa ,potrafi przybrać ludzką formę, informuje ,że nie da się jej pokonać i przeprasza za to ,że musi to "zakończyć zabawę".
+                        <span class="failure-msg">Uderzenie jej promienia kończy się praktycznie zawsze natychmiastową śmiercią.</span>
+                    </div>
+                    
+                    <div class="stats-box">
+                        <div><span class="stat-label">Żywioł</span><span class="stat-val">Ogień/Lód</span></div>
+                        <div><span class="stat-label">Charakter Próby</span><span class="stat-val">Zakończenie gry w sposób brutalny</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="prawa" class="head-card">
+                <div class="head-img-container">
+                    <img src="assets/prawa.png" alt="Głowa Prawa" class="head-img">
+                </div>
+                <div class="head-content">
+                    <h2 class="head-title">PRAWA</h2>
+                    
+                    <div class="head-attribute" style="color:#ff66cc;">ASPEKT SPOKOJU</div>
+                    <div class="head-desc">
+                        Spokój umysłu jest kluczem do przetrwania tej próby. Głowa ta testuje zdolność pretendenta do zachowania jasności myśli w obliczu chaosu i iluzji. Próbując zakłócić koncentrację, manipuluje percepcją rzeczywistości, tworząc halucynacje i zniekształcenia. Tylko ci, którzy potrafią utrzymać spokój i klarowność umysłu, mogą przejść tę próbę bez uszczerbku.
+                        <span class="failure-msg">Gdy ktoś zaatakuje iluzje ,te prawdopodobnie rozerwą go na strzępy</span>
+                    </div>
+                    
+                    <div class="stats-box">
+                        <div><span class="stat-label">Żywioł</span><span class="stat-val">Harmonia / Iluzja</span></div>
+                        <div><span class="stat-label">Charakter Próby</span><span class="stat-val">Stabilność Psychiczna</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dolna" class="head-card">
+                <div class="head-img-container">
+                    <img src="assets/dolna.png" alt="Głowa Dolna" class="head-img">
+                </div>
+                <div class="head-content">
+                    <h2 class="head-title">DOLNA</h2>
+                    
+                    <div class="head-attribute" style="color:#8d6e63;">ASPEKT INTELIGENCJI</div>
+                    <div class="aspect-def">Test logicznego myślenia.</div>
+                    
+                    <div class="head-desc">
+                        Wymyślenie odpowiedniego sposobu na pokonanie tej głowy jest kluczem do przetrwania. Atak fizyczny jest bezużyteczny ,ponieważ jej ciało jest twarde jak kamień.
+                        <span class="failure-msg">Niepowodzenie skutkuje rozerwaniem przez ostre sople.</span>
+                    </div>
+                    
+                    <div class="stats-box">
+                        <div><span class="stat-label">Żywioł</span><span class="stat-val">Lód / Krystalizacja</span></div>
+                        <div><span class="stat-label">Charakter Próby</span><span class="stat-val">Trzeźwość umysłu</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="antagonisci.html" class="back-home">← WRÓĆ DO GALERII CIENI</a>
+
+    </div>
+<script>
+        window.addEventListener('load', function() {
+            const srodkowa = document.getElementById('srodkowa');
+            
+            if (srodkowa) {
+                // To magiczna funkcja, która przewija stronę do elementu
+                srodkowa.scrollIntoView({
+                    behavior: 'auto',  // 'auto' = natychmiastowy skok (bez animacji)
+                    block: 'center',   // Ustawia element w pionowym środku ekranu
+                    inline: 'center'   // Ustawia element w poziomym środku
+                });
+            }
+        });
+    </script>
+</body>
+</html>
