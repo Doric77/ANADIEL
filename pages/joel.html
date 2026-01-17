@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Generał Jeol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA JEOLA (ZIEMIA / STAL / BRĄZ) --- */
+        :root {
+            --accent: #6b8e23;                 /* Oliwkowa Zieleń */
+            --accent-dark: #3e2723;            /* Ciemny brąz */
+            --accent-glow: rgba(107, 142, 35, 0.3);
+            
+            --bg-panel: rgba(15, 20, 15, 0.95); /* Bardzo ciemne tło paneli dla czytelności */
+            --bg-element: linear-gradient(90deg, #1a201a, #0f120f);
+            
+            --text-primary: #e0e0e0;
+            --text-secondary: #aebfab;
+            
+            --border-color: rgba(107, 142, 35, 0.3);
+        }
+
+        /* --- BAZA I TŁO (BEZ BLURA) --- */
+        body {
+            background-color: #0c0c0c;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* TŁO OSTRE JAK BRZYTWA */
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(10, 15, 5, 0.8)), 
+                url('../assets/joel_tlo.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* USUNIĘTY BLUR */
+            /* filter: blur(0); - domyślnie brak */
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1100px; /* Nieco węższy niż u królowej */
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            /* Ostra ramka */
+            border: 2px solid #3e2723;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(107, 142, 35, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 20px; color: #dcedc8;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: var(--bg-element); color: var(--text-secondary);
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #333; border-left: 4px solid #3e2723;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #1e261e;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(10, 10, 10, 0.8);
+            border: 1px solid #333; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #aaa; padding: 30px 20px; margin-top: 20px;
+            border: 1px solid #3e2723; background: rgba(0,0,0,0.3);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 4px solid #3e2723;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease; filter: sepia(0.2) contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.02); filter: none; }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(20, 20, 20, 0.9);
+            border: 1px solid #333;
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid #333; }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 40%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(20, 20, 20, 0.9); padding: 20px;
+            border: 1px solid #333;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: var(--text-secondary); text-decoration: none;
+            padding: 5px 0; transition: 0.2s;
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #888;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #444; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(107, 142, 35, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>GENERAŁ JOEL</h1>
+
+            <div class="logline">
+                Niezłomna tarcza Obliviaru. Żołnierz, który nie zadaje pytań, tylko wykonuje rozkazy. 
+                Jego lojalność wobec Królowej Keli jest legendarna, a milczenie – głośniejsze niż krzyk.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Mężczyzna w średnim wieku, o twarzy w tatuażach. Ciężki kolczasty naramiennik.</li>
+                    <li><strong>Atrybut:</strong> Wielki dwuręczny topór, który nosi na plecach. Broń jest prosta, bez ozdób – narzędzie pracy, nie biżuteria.</li>
+                    <li><strong>Zachowanie:</strong> Stoi zawsze o krok za Królową, z ręką na rękojeści. Rzadko się odzywa, obserwując każde zagrożenie.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: OBROŃCA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Dowódca:</strong> Stoi na czele armii Obliviaru. Żołnierze go uwielbiają, bo zawsze walczy w pierwszej linii.</li>
+                    <li><strong>Strateg:</strong> Preferuje obronę i kontratak. Zna każdy kamień w murach miasta i każde ukryte przejście w pałacu.</li>
+                    <li><strong>Kontrast:</strong> Jest fizyczną siłą w królestwie magii. Nie ufa czarom, ufa sobie.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">WIERNOŚĆ (SEKRET)</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Królowa Keli:</strong> Kocha ją platonicznie i bezwarunkowo. Wie, że nigdy nie będą razem, ale oddałby za nią życie bez wahania.</li>
+                    <li><strong>Kloi:</strong> Traktował zmarłą księżniczkę jak własną córkę. Jej śmierć złamała go tak samo mocno jak Królową.</li>
+                    <li><strong>Zasada:</strong> "Moje życie należy do tronu. Moje serce należy do cienia tronu."</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Niech inni rzucają zaklęcie ,gdy magia zawiedzie ,zostanie tylko moje mocne cięcie.”
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/jeol.png" alt="Generał Jeol">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Ranga</td><td class="infobox-value">Głównodowodzący</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">48 lat</td></tr>
+                <tr><td class="infobox-label">Frakcja</td><td class="infobox-value" style="color:#9b59b6;">Obliviar (Armia)</td></tr>
+                <tr><td class="infobox-label">Broń</td><td class="infobox-value">Topór dwuręczny</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Oddany</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">LOJALNOŚĆ</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">WŁADCZYNI</div>
+                <a href="keli.html">Królowa Keli</a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">PAMIĘĆ</div>
+                <a href="#" style="opacity:0.6; text-decoration:line-through;">Kloi</a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Suntos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- STYL SŁONECZNY --- */
+        :root {
+            --sun-gold: #f1c40f;    /* Jasne złoto */
+            --sun-burn: #d35400;    /* Ciemny bursztyn */
+            --bg-dark: #1a150e;     /* Ciemne tło pod spodem */
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        /* --- TŁO (PROMIENIE) --- */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: url('../assets/tlo_suntos.png') center center / cover no-repeat;
+            filter: brightness(0.6) contrast(1.2);
+        }
+
+        /* Animowane promienie światła (CSS Gradient) */
+        body::after {
+            content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(241, 196, 15, 0.05) 0deg,
+                rgba(241, 196, 15, 0.05) 10deg,
+                transparent 10deg,
+                transparent 20deg
+            );
+            animation: rotateSun 120s linear infinite;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* --- KONTENER GŁÓWNY --- */
+        .container {
+            max-width: 1000px; width: 100%;
+            display: grid; grid-template-columns: 1.5fr 2fr; gap: 50px;
+            /* Ciemny panel ze złotą poświatą */
+            background: rgba(20, 15, 10, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(241, 196, 15, 0.4);
+            box-shadow: 0 0 60px rgba(241, 196, 15, 0.15);
+            padding: 50px;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Dekoracyjne narożniki */
+        .corner {
+            position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--sun-gold);
+            transition: 0.3s;
+        }
+        .tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .container:hover .corner { width: 40px; height: 40px; box-shadow: 0 0 10px var(--sun-gold); }
+
+
+        /* --- LEWA STRONA (OBRAZ) --- */
+        .image-section {
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .portrait-container {
+            width: 280px; height: 280px;
+            position: relative;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(135deg, var(--sun-gold), var(--sun-burn));
+            box-shadow: 0 0 50px rgba(241, 196, 15, 0.5);
+        }
+
+        .portrait-container img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff; /* Biała obwódka wewnątrz */
+        }
+
+        /* AUREOLA (Halo) */
+        .halo {
+            position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
+            border: 1px dashed var(--sun-gold);
+            border-radius: 50%;
+            animation: spinHalo 20s linear infinite;
+        }
+
+        .title-tag {
+            margin-top: 25px;
+            font-family: 'Cinzel', serif;
+            color: var(--sun-gold);
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+        }
+
+        /* --- PRAWA STRONA (TEKST) --- */
+        .text-section { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: #fff;
+            margin: 0; font-weight: 700; letter-spacing: 2px;
+            /* Złoty Gradient na Tekście */
+            background: linear-gradient(to bottom, #fff, var(--sun-gold));
+    -webkit-background-clip: text;
+    background-clip: text; /* <--- DODAJ TĘ LINIJKĘ */
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.5));
+        }
+
+        .quote {
+            font-style: italic; color: #f9e79f; font-size: 1.1rem;
+            border-left: 3px solid var(--sun-gold);
+            padding-left: 20px; margin: 5px 0 25px 0;
+            opacity: 0.9;
+        }
+
+        .lore-text {
+            line-height: 1.7; font-size: 1rem; color: #e5e7e9;
+            text-align: justify;
+        }
+
+        .highlight { color: var(--sun-gold); font-weight: 700; }
+
+        /* --- STATYSTYKI --- */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(241, 196, 15, 0.05);
+            padding: 12px; border: 1px solid rgba(241, 196, 15, 0.2);
+            transition: 0.3s;
+        }
+        .stat-box:hover { background: rgba(241, 196, 15, 0.15); box-shadow: 0 0 15px rgba(241, 196, 15, 0.2); }
+
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: #d35400; font-weight: 700; display: block; margin-bottom: 3px; }
+        .stat-value { font-family: 'Cinzel', serif; font-size: 1rem; color: #fff; }
+
+        /* --- PRZYCISK --- */
+        .back-btn {
+            margin-top: 35px; color: var(--sun-gold); text-decoration: none;
+            font-family: 'Cinzel', serif; font-size: 0.9rem;
+            border: 1px solid var(--sun-gold);
+            padding: 12px 30px; display: inline-block;
+            transition: 0.3s; background: rgba(0,0,0,0.2);
+        }
+        .back-btn:hover { background: var(--sun-gold); color: #000; box-shadow: 0 0 20px var(--sun-gold); }
+
+        /* --- ANIMACJE --- */
+        @keyframes rotateSun { 100% { transform: rotate(360deg); } }
+        @keyframes spinHalo { 100% { transform: rotate(-360deg); } }
+
+        /* Responsywność */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; text-align: center; }
+            .image-section { margin-bottom: 30px; }
+            .lore-text { text-align: left; }
+            .stats-grid { text-align: left; }
+            .quote { border-left: none; border-top: 2px solid var(--sun-gold); padding-top: 10px; padding-left: 0; }
+            .corner { display: none; } /* Ukrywamy rogi na telefonie dla czystości */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+
+        <div class="image-section">
+            <div class="portrait-container">
+                <div class="halo"></div>
+                <img src="../assets/god_suntos.png" alt="Suntos">
+            </div>
+            <div class="title-tag">Pan Światła</div>
+        </div>
+
+        <div class="text-section">
+            
+            <h1>SUNTOS</h1>
+            
+            <div class="quote">
+                „Ciemność nie jest przeciwnikiem. Jest tylko brakiem mojej obecności. Gdzie stąpam ja, tam cienie przestają istnieć.”
+            </div>
+
+            <div class="lore-text">
+                Najjaśniejsza gwiazda w panteonie Anadiel. Suntos to ucieleśnienie <span class="highlight">słońca, prawdy i porządku</span>. Dla swoich wyznawców jest życiodajnym ciepłem, które pozwala wzrastać plonom, lecz dla wrogów staje się bezlitosnym żarem, który spala do samej kości.
+                <br><br>
+                Jego świątynie budowane są bez dachów, by nic nie oddzielało wiernych od jego oblicza. Mówi się, że Suntos nigdy nie śpi, a każdy wschód słońca to jego spojrzenie rzucone na świat.
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Domena</span>
+                    <span class="stat-value">Światło / Dzień</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Symbol</span>
+                    <span class="stat-value">Złota Tarcza</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Charakter</span>
+                    <span class="stat-value">Praworządny Dobry</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Żywioł</span>
+                    <span class="stat-value">Ogień Niebiański</span>
+                </div>
+            </div>
+
+            <a href="bogowie.html" class="back-btn">← WRÓĆ DO PANTEONU</a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

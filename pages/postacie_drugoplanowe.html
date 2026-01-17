@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Postacie Drugoplanowe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- BAZA --- */
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 0; min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* TŁO ZOPTYMALIZOWANE */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('../assets/drugoplanowe_tlo.png');
+            background-size: cover; background-position: center;
+            filter: blur(1px); transform: scale(1.05); will-change: transform;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+
+        /* --- NAGŁÓWEK --- */
+        header { text-align: center; margin-bottom: 60px; }
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 3rem; color: #fff;
+            margin: 0 0 10px 0; letter-spacing: 3px; text-transform: uppercase;
+        }
+        .subtitle { font-size: 1rem; color: #888; font-family: 'Cinzel', serif; letter-spacing: 2px; }
+
+        /* --- SEKCJE --- */
+        .section-title {
+            font-family: 'Cinzel', serif; font-size: 2rem; color: #d4af37;
+            margin: 60px 0 30px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px; display: inline-block;
+        }
+
+        .grid {
+            display: flex; flex-wrap: wrap; gap: 25px; justify-content: center;
+        }
+
+        /* --- KARTA POSTACI (BAZA) --- */
+        .card {
+            background: rgba(20, 20, 25, 0.85);
+            border: 1px solid #444;
+            width: 220px; height: 340px;
+            display: flex; flex-direction: column;
+            text-decoration: none; transition: 0.3s;
+            position: relative; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card:hover { transform: translateY(-5px); border-color: #aaa; z-index: 2; }
+
+        /* --- KONTENER MEDIÓW (IMG + VIDEO) --- */
+        .card-img-container { 
+            width: 100%; 
+            height: 220px; 
+            overflow: hidden; 
+            position: relative; /* Trzyma media w ryzach */
+        }
+
+        /* 1. OBRAZEK (Na wierzchu) */
+        .card-img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            position: absolute; top: 0; left: 0;
+            z-index: 2;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 2. WIDEO (Pod spodem) */
+        .card-video {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 1; 
+        }
+
+        /* HOVER: Obrazek znika, wideo zostaje */
+        .card:hover .card-img {
+            opacity: 0;
+            transform: scale(1.05); /* Lekki zoom przy znikaniu */
+        }
+
+        /* --- TREŚĆ KARTY --- */
+        .card-content {
+            padding: 15px; text-align: center; flex-grow: 1;
+            display: flex; flex-direction: column; justify-content: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            position: relative;
+            z-index: 10; /* Tekst zawsze na wierzchu! */
+        }
+        .card-name { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #fff; margin: 0; font-weight: 700; }
+        .card-role { font-size: 0.75rem; color: #aaa; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- STYLE SPECJALNE DLA GRUP --- */
+
+        /* 1. LEGENDY (Złoto/Brąz) */
+        .legend-card { border-bottom: 3px solid #d4af37; }
+        .legend-card:hover { box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+
+        /* 2. RODZINA/CYWILE (Szarość/Błękit) */
+        .civil-card { border-bottom: 3px solid #607d8b; }
+        .civil-card:hover { box-shadow: 0 0 20px rgba(96, 125, 139, 0.2); }
+
+        /* 3. ZWIERZAKI (Zieleń/Natura) */
+        .beast-card { border-bottom: 3px solid #27ae60; }
+        .beast-card:hover { box-shadow: 0 0 20px rgba(39, 174, 96, 0.2); }
+        
+        /* POWRÓT */
+        .back-home {
+            display: block; width: 200px; margin: 60px auto; text-align: center;
+            text-decoration: none; color: #666; border: 1px solid #333; padding: 15px;
+            font-family: 'Cinzel', serif; transition: 0.3s;
+        }
+        .back-home:hover { border-color: #fff; color: #fff; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>POSTACIE DRUGOPLANOWE</h1>
+            <div class="subtitle">HEROSI, ZDRAJCY I NIEMI ŚWIADKOWIE</div>
+        </header>
+
+        <div class="section-title" style="color:#d4af37;">DZIEDZICTWO I TAJEMNICE</div>
+        <div class="grid">
+            
+            <a href="angarin.html" class="card legend-card">
+                <div class="card-img-container">
+                    <img src="../assets/angarin.png" class="card-img">
+                    <video src="../assets/angarin.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">ANGARIN</h3>
+                    <div class="card-role">Mnich Męczennik</div>
+                </div>
+            </a>
+
+            <a href="jan.html" class="card legend-card">
+                <div class="card-img-container">
+                    <img src="../assets/jan.png" class="card-img">
+                    <video src="../assets/jan.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">JAN HENSERKER</h3>
+                    <div class="card-role">Legenda Khan'den</div>
+                </div>
+            </a>
+
+            <a href="raf.html" class="card legend-card">
+                <div class="card-img-container">
+                    <img src="../assets/raf.png" class="card-img">
+                    <video src="../assets/raf.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">RAF</h3>
+                    <div class="card-role">Ojciec Cade'a</div>
+                </div>
+            </a>
+
+            <a href="astelia.html" class="card legend-card">
+                <div class="card-img-container">
+                    <img src="../assets/astelia.png" class="card-img">
+                    <video src="../assets/astelia.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">ASTELIA</h3>
+                    <div class="card-role">Matka Emmy</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="section-title" style="color:#607d8b;">SPOŁECZNOŚĆ I KONFLIKTY</div>
+        <div class="grid">
+
+            <a href="hugrim.html" class="card civil-card">
+                <div class="card-img-container">
+                    <img src="../assets/hugrim.png" class="card-img">
+                    <video src="../assets/hugrim.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">HUGRIM</h3>
+                    <div class="card-role">Kowal / Ojciec Evie</div>
+                </div>
+            </a>
+
+            <a href="matt.html" class="card civil-card">
+                <div class="card-img-container">
+                    <img src="../assets/matt.png" class="card-img">
+                    <video src="../assets/matt.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">MATT</h3>
+                    <div class="card-role">Strażnik Muru</div>
+                </div>
+            </a>
+
+            <a href="frank.html" class="card civil-card">
+                <div class="card-img-container">
+                    <img src="../assets/frank.png" class="card-img">
+                    <video src="../assets/frank.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">FRANK</h3>
+                    <div class="card-role">Górnik / Ojciec Emmy</div>
+                </div>
+            </a>
+
+            <a href="pawlo.html" class="card civil-card">
+                <div class="card-img-container">
+                    <img src="../assets/pawlo.png" class="card-img">
+                    <video src="../assets/pawlo.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">PAWLO</h3>
+                    <div class="card-role">Bogaty Dzieciak</div>
+                </div>
+            </a>
+
+            <a href="brym.html" class="card civil-card">
+                <div class="card-img-container">
+                    <img src="../assets/brym.png" class="card-img">
+                    <video src="../assets/brym.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">BRYM</h3>
+                    <div class="card-role">Przełożony Kopalni</div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="section-title" style="color:#27ae60;">UNIKALNI TOWARZYSZE</div>
+        <div class="grid">
+
+            <a href="mientus.html" class="card beast-card">
+                <div class="card-img-container">
+                    <img src="../assets/mientus.png" class="card-img">
+                    <video src="../assets/mientus.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">MIĘTUS</h3>
+                    <div class="card-role">Miętowy Gepard</div>
+                </div>
+            </a>
+
+            <a href="tiki.html" class="card beast-card">
+                <div class="card-img-container">
+                    <img src="../assets/tiki.png" class="card-img">
+                    <video src="../assets/tiki.mp4" class="card-video" loop muted playsinline></video>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-name">TIKI</h3>
+                    <div class="card-role">Wiewiórka Kupiec</div>
+                </div>
+            </a>
+
+        </div>
+
+        <a href="postacie.html" class="back-home">← WRÓĆ DO STRONY GŁÓWNEJ</a>
+
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const video = card.querySelector('video');
+
+            if (video) {
+                // Gdy myszka wjeżdża -> Graj
+                card.addEventListener('mouseenter', () => {
+                    video.play();
+                });
+
+                // Gdy myszka zjeżdża -> Pauza i przewiń do początku
+                card.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0; 
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

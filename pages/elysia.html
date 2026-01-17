@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Księżniczka Elysia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA ELYSII (KREW / NADZIEJA / POŚWIĘCENIE) --- */
+        :root {
+            --accent: #e74c3c;                 /* Czerwień (ale jaśniejsza, "serce") */
+            --accent-gold: #f1c40f;            /* Złoto (Królewska krew) */
+            --bg-panel: rgba(25, 20, 20, 0.95);
+            --text-primary: #fadbd8;           /* Bardzo blady róż/biel */
+            
+            --border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        /* --- BAZA I TŁO (ZOPTYMALIZOWANE) --- */
+        body {
+            background-color: #0f0505;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(20, 5, 5, 0.1)), 
+                url('../assets/elysia_tlo.png');
+            background-size: cover;
+            background-position: center;
+            
+            filter: blur(1px); 
+            transform: scale(1.05);
+            will-change: transform;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3.5rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 20px; color: #fff;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #1a1010, #0a0505); 
+            color: #e6b0aa;
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #333; border-left: 4px solid #641e16;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #2b1515;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(20, 10, 10, 0.6);
+            border: 1px solid #333; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #aaa; padding: 30px 20px; margin-top: 20px;
+            border-top: 1px solid var(--accent);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease; filter: contrast(1.1) saturate(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.02); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(30, 20, 20, 0.8);
+            border: 1px solid #333;
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid #333; }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(30, 20, 20, 0.8); padding: 20px;
+            border: 1px solid #333;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #e6b0aa; text-decoration: none;
+            padding: 5px 0; transition: 0.2s;
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #888;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #444; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(231, 76, 60, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>KSIĘŻNICZKA ELYSIA</h1>
+
+            <div class="logline">
+                Córka Króla Verta i nadzieja Ernoyi. Kobieta, która odłożyła na bok przywileje, by wyruszyć w desperacką podróż. 
+                Przez lata szukała sposobu by znaleźćlekarstwo na chorobę, która trawi jej ojca, zanim upadnie królestwo.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Posiada siłę ojca, ale w jej oczach widać głęboką troskę. Nosi niebieso-białe szaty.</li>
+                    <li><strong>Twarz:</strong> Zmartwiona ,widzi obłęd ojca.</li>
+                    <li><strong>Zachowanie:</strong> Zdeterminowana, często ignoruje etykietę dworską, jeśli pozwala to szybciej osiągnąć cel.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">MISJA: OCALENIE KRÓLA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Choroba Verta:</strong> Klątwa Ezharka, która powoli zabija króla (lub zmienia go w coś, czym nie chce być). Elysia wie, że czas ucieka.</li>
+                    <li><strong>Cel:</strong> Zdobyć lekarstwo (lub wiedzę), którą posiadał upadły lord Ezhark. Jest gotowa paktować nawet z wrogami, by to osiągnąć.</li>
+                    <li><strong>Poświęcenie:</strong> Opuściła bezpieczny Wilczy Dwór, by szukać ratunku na szlakach pełnych potworów, nieraz wracała poobijana do domu.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">SOJUSZNICY I CIENIE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Król Vert (Ojciec):</strong> Kocha go bezgranicznie. Jest jedyną z osób, która widzi w nim słabnącego człowieka, a nie tylko legendę.</li>
+                    <li><strong>Feliks:</strong> Jej przyjaciel ,który pomaga jej w wyleczeniu Verta.</li>
+                    <li><strong>Angarin:</strong> Mnich, który wyjawia sposób na wyleczenie Verta.</li>
+                    <li><strong>Kaelix:</strong> Głęboki szacunek ,to on ją pocieszał jak płakała wracając z pustymi rękami</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong> Świętuje nowy rok w Purpurosie z ojcem.</li>
+                    <li><strong>Stan:</strong> Szczęśliwa po wyleczeniu ojca ,lecz smutna z powodu śmierci Feliksa.</li>
+                    <li><strong>Zadanie:</strong> Sprawić by Angaranin nie pakował się w większe tarapaty.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Dla ojca otworze piekło”
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/elysia.png" alt="Elysia">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Tytuł</td><td class="infobox-value" style="color:#e74c3c;">Mały Wilczek</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">29 lat</td></tr>
+                <tr><td class="infobox-label">Rodzina</td><td class="infobox-value">Król Vert (Ojciec)</td></tr>
+                <tr><td class="infobox-label">Cel</td><td class="infobox-value">Przetrawić wszystko co się wydarzyło</td></tr>
+                <tr><td class="infobox-label">Sojusznicy</td><td class="infobox-value">Angaranin, Kaelix</td></tr>
+                <tr><td class="infobox-label">Debiut</td><td class="infobox-value">Rozdział XIX</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">WIĘZI</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">OJCIEC</div>
+                <a href="vert.html">
+                    Król Vert
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">Uzdrowiony tata.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">POMOCNICY</div>
+                <a href="feliks.html">
+                    Feliks
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">Zginął spełniony by ocalić Verta.</span>
+                </a>
+                <a href="angaranin.html">
+                    Angaranin
+                    <span style="display:block; font-size:0.75rem; color:#e6b0aa; font-weight:400;">Zawdzięcza mu wszystko / widzi ile stracił by dla niej.</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

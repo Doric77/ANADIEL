@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Lyra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- NOWA KOLORYSTYKA LYRY (MNIEJ ZIELENI, WIĘCEJ MROKU) --- */
+        :root {
+            --accent: #2ecc71;                 /* Szmaragdowy akcent (Zostaje) */
+            --accent-dark: #1e8449;            /* Ciemniejszy do cieni */
+            --accent-glow: rgba(46, 204, 113, 0.15); /* Dużo delikatniejsza poświata */
+            
+            --bg-main: #0a0a0a;                /* Czysta czerń/grafit zamiast zieleni */
+            --bg-panel: rgba(26, 26, 30, 0.85); /* Neutralny panel (nie zielony) */
+            --bg-element: linear-gradient(to right, #1a1a20, #141418); /* Neutralne przyciski */
+            
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0b0;         /* Neutralny szary */
+            
+            --border-color: rgba(46, 204, 113, 0.2);
+            --spoiler: #ff3333;
+        }
+
+     /* --- TŁO LYRY (NATURA) --- */
+        body {
+            background: 
+                /* Delikatny gradient w odcieniach ciemnej zieleni */
+                linear-gradient(rgba(0,0,0,0.3), rgba(0, 0, 0, 0.95)), 
+                url('../assets/lyra_tlo.png');
+            
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            /* Zmniejszona poświata wewnętrzna */
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 10px rgba(46, 204, 113, 0.03);
+            padding: 40px;
+            border-radius: 4px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #fff;
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            /* Subtelniejszy cień tekstu */
+            text-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+            position: relative;
+        }
+
+        h1::after {
+            content: ''; display: block; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-top: 15px; opacity: 0.7;
+        }
+
+        /* LOGLINE - Neutralne tło, zielony pasek */
+        .logline {
+            font-size: 1.25rem; font-weight: 500; font-style: italic;
+            background: linear-gradient(to right, rgba(255,255,255,0.03), transparent);
+            border-left: 4px solid var(--accent);
+            padding: 25px; color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: var(--bg-element); color: var(--text-secondary);
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid var(--border-color); border-left: 4px solid #444;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 600;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            /* Tylko delikatna poświata przy aktywnym */
+            background: linear-gradient(to right, rgba(46, 204, 113, 0.08), rgba(20,20,30,0.5));
+            border-left: 4px solid var(--accent); color: #fff;
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; transition: 0.3s; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; 
+            background-color: rgba(15, 15, 20, 0.5); /* Ciemny, neutralny panel */
+            border: 1px solid var(--border-color); border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* STATUS FABULARNY (CYJANOWY - WYRÓŻNIENIE) */
+        .status-header { border-left-color: #00d2ff !important; }
+        
+        .status-header:hover, .status-header.active { 
+            /* Cyjanowe tło (gradient) i poświata */
+            background: linear-gradient(to right, rgba(0, 210, 255, 0.1), rgba(20,20,30,0.5));
+            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.1);
+            text-shadow: 0 0 10px #00d2ff;
+        }
+
+        /* SEKRETY */
+        .accordion.secret { border-color: var(--spoiler); color: var(--spoiler); opacity: 0.8; }
+        .accordion.secret:hover, .accordion.secret.active { 
+            opacity: 1; background: rgba(255, 50, 50, 0.1); border-left-color: var(--spoiler);
+            text-shadow: 0 0 10px var(--spoiler);
+        }
+        .accordion.secret.active::after { color: var(--spoiler); }
+
+        /* CYTAT STAŁY */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.5rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; position: relative;
+            background: radial-gradient(ellipse at center, rgba(46, 204, 113, 0.1) 0%, transparent 70%);
+        }
+        .quote-static::before, .quote-static::after {
+            content: ''; display: block; height: 1px; width: 50%; margin: 20px auto;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        /* OBRAZEK 4:3 */
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 15px rgba(46, 204, 113, 0.15);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            border-radius: 4px;
+        }
+
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .char-image-container:hover img { transform: scale(1.03); }
+
+        /* INFOBOX */
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.95rem; 
+            background: rgba(20, 20, 25, 0.6); /* Neutralne tło */
+            border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;
+        }
+        .infobox td { padding: 15px; border-bottom: 1px solid rgba(46, 204, 113, 0.15); }
+        .infobox tr:last-child td { border-bottom: none; }
+        .infobox tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+        .infobox-label { 
+            font-weight: 700; color: var(--accent); text-transform: uppercase; 
+            letter-spacing: 1px; font-size: 0.85rem; width: 40%;
+        }
+        .infobox-value { color: #fff; text-align: right; font-weight: 600; }
+
+        /* LINKI */
+        .related-links {
+            background: rgba(20, 20, 25, 0.6); padding: 25px;
+            border: 1px solid var(--border-color); border-radius: 4px;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+            margin-bottom: 15px; font-weight: 800; letter-spacing: 2px;
+        }
+        .related-links a {
+            display: block; color: var(--text-secondary); text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 500;
+        }
+        .related-links a:hover { 
+            color: #fff; padding-left: 10px; border-bottom: 1px solid var(--accent);
+            text-shadow: 0 0 5px var(--accent);
+        }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px;
+        }
+        .back-btn:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; padding: 20px; }
+            .sidebar { order: -1; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>LYRA</h1>
+
+            <div class="logline">
+                Pozornie delikatna uzdrowicielka, która udowadnia, że w świecie brutalnej siły i ostrych mieczy to nadzieja i gotowość do poświęceń są najpotężniejszą bronią.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Gesty:</strong> Lubi robić maślane oczka gdy czegoś chce, lubi zaczepiać lekkim uderzeniem np w łokieć.</li>
+                    <li><strong>Ruch:</strong> Lekki, niemal bezgłośny (nawyk leśny).</li>
+                    <li><strong>Mowa:</strong> Głos łagodny, melodyjny,stara się poprawiać nim humor.Stara się być uśmiechnięta w świecie smutku.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">WYGLĄD I MOCE (MOC)</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Sylwetka:</strong> Drobna, niepozorna.</li>
+                    <li><strong>Zmiennokształtność:</strong> Potrafi przybierać formę potężnego Sowoniedźwiedzia (kontrast z jej ludzką delikatnością).</li>
+                    <li><strong>Aura:</strong> W chwilach użycia magii pachnie ozonem i mokrą ziemią, często jej magii towaszyży ,,wysychanie" ciała.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">OSOBOWOŚĆ</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Dominujące:</strong> Empatia, poświęcenie, ciekawość świata (poza lasem).</li>
+                    <li><strong>Sprzeczność:</strong> Pacyfistka, która posiada moc zdolną rozszarpać wrogów na strzępy.</li>
+                    <li><strong>Rola w grupie:</strong> Klej spajający drużynę. To ona widzi dobro w Cade'dzie, gdy on sam go nie dostrzega.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">MOTYWACJE I LĘKI</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Cel krótki:</strong> Pomóc Cade'owi odnaleźć ojca.</li>
+                    <li><strong>Cel ostateczny:</strong> Zrozumieć kim jest i dlaczego posiada tak potężne moce.</li>
+                    <li><strong>Największy lęk:</strong> Że jej dzika natura (bestia) przejmie kontrolę i skrzywdzi przyjaciół.</li>
+                    <li><strong>Cena graniczna:</strong> Własna dusza (którą ostatecznie ryzykuje).</li>
+                </ul>
+            </div>
+
+            <button class="accordion">KONFLIKT WEWNĘTRZNY</button>
+            <div class="panel">
+                <p>
+                    Lyra walczy z poczuciem obcości. Nie może zrozumieć ,czemu urodziła się inna niż reszta jej ludu w Floravell. Czuje, że jej moce są zarówno błogosławieństwem jak i przekleństwem. Pragnie akceptacji i zrozumienia, ale boi się, że jej prawdziwa natura (bestia) odrzuci tych, których kocha.
+                </p>
+            </div>
+
+            <button class="accordion">RELACJE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Cade:</strong> Głęboka więź. Ona była jego moralnym kompasem, on jej obrońcą. Teraz jest częścią jego broni.</li>
+                    <li><strong>Archtos:</strong> Widziała w nim smutek i honor. Ufała mu bezgranicznie.</li>
+                    <li><strong>Geldef i Drelwen:</strong> Duchowi przewodnicy/strażnicy, których spotkała w zaświatach (pomiędzy wymiarami).</li>
+                     <li><strong>Emma:</strong>Traktuje ją jak starszą tech-siostre</li>
+                </ul>
+                </ul>
+            </div>
+
+            <button class="accordion">OŚ FABULARNA</button>
+            <div class="panel">
+                <ul>
+                    <li>Ucieczka z Floravell.</li>
+                    <li>Spotkanie z Cade'em i Archtosem.</li>
+                    <li>Podróż przez Zavr i Val'Serin.</li>
+                    <li>Bitwa w Świątyni Zepsutego Smoka.</li>
+                    <li><strong>Punkt Kulminacyjny:</strong> Ryzykuje duszę gdy tylko pojawia się cień nadziei na powrót do życia i przyjaciół.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY (BIEŻĄCY)</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Stan fizyczny:</strong> Martwa (Ciało zniszczone/pochowane).</li>
+                    <li><strong>Stan duchowy:</strong> Część Uwięziona/Obecna w Sztylecie Cade'a.</li>
+                    <li><strong>Lokalizacja:</strong> Przy pasie Cade'a (Runy zmieniły kolor na zielony).</li>
+                    <li><strong>Świadomość:</strong> Rozmawiała z Geldef i Drelwenem, wybrała ryzyko pozostania "pomiędzy", by jeszcze raz ujrzeć bliskich.</li>
+                </ul>
+            </div>
+
+            <button class="accordion secret">⚠ SEKRETY (TYLKO DLA AUTORA)</button>
+            <div class="panel">
+                <ul>
+                    <li>Jeśli esencja sztyletu zostanie zużyta, Lyra zniknie na zawsze (wymazana z istnienia).</li>
+                    <li>To dzięki Drelwenowi ma szanse zmartwychwstać.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Zasłużyłam na spokój... ale jeśli istnieje choć cień szansy, bym mogła jeszcze raz spojrzeć im w oczy... to zaryzykuję.”
+            </div>
+
+            <a href="postacie.html" class="back-btn">← WRÓĆ DO BAZY POSTACI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/lyra_main.png" alt="Lyra - Portret">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Martwa / Dusza w broni</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">15 lat (w chwili śmierci)</td></tr>
+                <tr><td class="infobox-label">Rasa</td><td class="infobox-value">Człowiek / Druid</td></tr>
+                <tr><td class="infobox-label">Pochodzenie</td><td class="infobox-value">Floravell</td></tr>
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Serce Drużyny</td></tr>
+                <tr><td class="infobox-label">Specjalizacja</td><td class="infobox-value">Zmiennokształtność<br>Magia Natury</td></tr>
+                <tr><td class="infobox-label">Debiut</td><td class="infobox-value">I Rozdział</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">SIECI POWIĄZAŃ</div>
+                
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:10px; opacity:0.8;">BLISCY / KLUCZOWI</div>
+                
+                <a href="cade.html">
+                    Cade
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Najlepszy przyjaciel.</span>
+                </a>
+                
+                <a href="archtos.html">
+                    Archtos
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Obrońca, któremu ufała ,bardzo go lubi.</span>
+                </a>
+                 <a href="emma.html">
+                    Emma
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Traktuje ją jak starszą siostrę.</span>
+                </a>
+                <a href="kaelix.html">
+                    Kaelix
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Przyjaxny bard.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">NAPIĘCIA</div>
+                
+                <a href="#">
+                    Rodzice
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Chcąc jej pomóc krzywdzą ją.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">BYTY DUCHOWE</div>
+                
+                <a href="#">
+                    Geldef
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Przewodniczka w zaświatach.</span>
+                </a>
+                 <a href="#">
+                    Drelwen
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Świadek jej wyboru.</span>
+                </a>
+ <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">Wrogowie</div>
+                <a href="#">
+                    Inkantacja zepsutego smoka / duchy dzici
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Zabiła ją.</span>
+                </a>
+                
+
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

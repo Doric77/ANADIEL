@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Pawlo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA PAWLO (BOGACTWO / PYCHA) --- */
+        :root {
+            --accent: #c0392b;                 /* Agresywna czerwień */
+            --accent-gold: #f1c40f;            /* Złoto */
+            --bg-panel: rgba(30, 10, 10, 0.9); /* Czerwonawy panel */
+            --text-primary: #fdedec;           /* Jasny róż/biel */
+            
+            --border-color: rgba(192, 57, 43, 0.5);
+        }
+
+        /* --- BAZA I TŁO (BLUR 1PX / RGBA 0.3) --- */
+        body {
+            background-color: #150505;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            /* JAŚNIEJSZE TŁO (0.3) */
+            background: 
+                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                url('../assets/pawlo_tlo.png');
+            background-size: cover; background-position: center;
+            
+            /* OSTRZEJSZE TŁO (1px) */
+            filter: blur(3px); 
+            transform: scale(1.02);
+            will-change: transform;
+        }
+
+        /* --- KONTENER --- */
+        .container {
+            max-width: 1000px; /* Węższy kontener bo krótka karta */
+            width: 100%;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 40px rgba(192, 57, 43, 0.4);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: var(--accent-gold); font-size: 3rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+        }
+
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(192, 57, 43, 0.1);
+            border-left: 5px solid var(--accent-gold);
+            padding: 20px; color: #fff;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #2c0b0b, #150505); 
+            color: #e6b0aa;
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #641e16; border-left: 4px solid #922b21;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .accordion:hover, .active {
+            background: #922b21;
+            border-left: 4px solid var(--accent-gold); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent-gold); }
+
+        .panel {
+            padding: 0 20px; background-color: rgba(40, 10, 10, 0.6);
+            border: 1px solid #641e16; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent-gold); font-weight: 700; }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #f1c40f; padding: 30px 20px;
+            margin-top: 20px; border-top: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 1/1; /* Kwadratowe zdjęcie */
+            background: #000; border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.2);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease;
+        }
+        .char-image-container:hover img { transform: scale(1.1); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(30, 10, 10, 0.8);
+            border: 1px solid var(--border-color);
+        }
+        .infobox td { padding: 10px; border-bottom: 1px solid rgba(192, 57, 43, 0.3); }
+        .infobox-label { font-weight: 700; color: var(--accent-gold); width: 45%; }
+        .infobox-value { text-align: right; }
+
+        .back-btn {
+            display: inline-block; margin-top: 20px; color: #c0392b;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px; border: 1px solid #c0392b;
+            padding: 10px 15px; text-align: center;
+        }
+        .back-btn:hover { background: var(--accent); color: #fff; }
+
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>PAWLO</h1>
+
+            <div class="logline">
+                Syn lokalnego bogacza, którego ego jest większe niż jego brzuch. 
+                Typowy karczemny cwaniak, który myśli, że pieniądze ojca kupią mu szacunek i siłę.
+            </div>
+
+            <button class="accordion">BOGACTWO BEZ GUSTU</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Otyły chłopak w jaskrawych, drogich szatach, które opinają się na nim w niewłaściwych miejscach. Palce ma obwieszone złotymi pierścieniami.</li>
+                    <li><strong>Zachowanie:</strong> Głośny, roszczeniowy, zawsze otoczony twoimi koleżkami.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ZACZEPKA I WROBIENIE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Bójka:</strong> Wyśmiał Cade i Lyre gdy weszli do karmczy Jana w Kecie ,oceił ich po wyglądzie i prowokował.</li>
+                    <li><strong>Zemsta:</strong> Gdy jego Ego ucierpiało ,oszukał StoneHearta, że Cade i Lyra stoją za zniknięciem Jana.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Nie pasujesz do tego miasta!”
+            </div>
+
+            <a href="postacie_drugoplanowe.html" class="back-btn">← WRÓĆ DO POSTACI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/pawlo.png" alt="Pawlo">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Lokalny Głupek</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Bogaty Dzieciak</td></tr>
+                <tr><td class="infobox-label">Relacja</td><td class="infobox-value" style="color:#c0392b;">Wróg (Zazdrość)</td></tr>
+                <tr><td class="infobox-label">Akcja</td><td class="infobox-value">Kłamca</td></tr>
+            </table>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

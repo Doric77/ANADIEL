@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Stoneheart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA STONEHEARTA (MOSIĄDZ / NAUKA / CIEŃ) --- */
+        :root {
+            --accent: #c0a062;                 /* Brudny Mosiądz */
+            --accent-dark: #5e4e24;            /* Stare złoto/brąz */
+            --accent-glow: rgba(192, 160, 98, 0.3); /* Industrialna poświata */
+            
+            --bg-main: #0c0c0c;                /* Grafitowa czerń */
+            --bg-panel: rgba(20, 20, 22, 0.9); /* Laboratoryjny mrok */
+            --bg-element: linear-gradient(90deg, #1a1a1c, #101010);
+            
+            --text-primary: #e0e0e0;           /* Szary papier */
+            --text-secondary: #a0a0a0;         /* Stalowy */
+            
+            --border-color: rgba(192, 160, 98, 0.25);
+            --spoiler: #fff;
+        }
+
+        /* --- BAZA I TŁO (Z ROZMYCIEM) --- */
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+      /* 2. WARSTWA TŁA (ZOPTYMALIZOWANA) */
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+
+            background: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(10, 10, 10, 0.9)), 
+                url('../assets/stoneheart_tlo.png');
+            background-size: cover;
+            background-position: center;
+            
+            /* USUNIĘTE: background-attachment: fixed; (To powodowało lagi) */
+
+            filter: blur(1px); 
+            transform: scale(1.05);
+            
+            will-change: transform; /* Dopalacz dla płynności */
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(192, 160, 98, 0.05);
+            padding: 40px;
+            border-radius: 4px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3.5rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--accent-dark);
+            position: relative;
+        }
+
+        h1::after {
+            content: ''; display: block; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-top: 15px; opacity: 0.7;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: linear-gradient(90deg, rgba(192, 160, 98, 0.1), transparent);
+            border-left: 4px solid var(--accent);
+            padding: 25px; color: #dcdcdc;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: var(--bg-element); color: var(--text-secondary);
+            cursor: pointer; padding: 18px 25px; width: 100%;
+            border: 1px solid var(--border-color); border-left: 4px solid #3e3e3e;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: linear-gradient(90deg, rgba(192, 160, 98, 0.15), transparent);
+            border-left: 4px solid var(--accent); color: #fff;
+            text-shadow: 0 0 8px var(--accent);
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(15, 15, 15, 0.5);
+            border: 1px solid var(--border-color); border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* Status Fabularny - STALOWY */
+        .status-header { border-left-color: #7f8c8d !important; }
+
+        /* SEKRETY */
+        .accordion.redacted { opacity: 0.7; font-family: 'Courier New', monospace; letter-spacing: 0; }
+        .redacted-text {
+            font-family: 'Courier New', monospace; text-align: center; padding: 20px;
+            color: #d4af37; background: rgba(0,0,0,0.3); letter-spacing: 2px;
+        }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.3rem;
+            font-style: italic; color: #ccc; padding: 40px 20px; margin-top: 30px;
+            border-top: 1px solid rgba(192, 160, 98, 0.2);
+            border-bottom: 1px solid rgba(192, 160, 98, 0.2);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 1px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s ease; filter: sepia(0.3) contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.03); filter: sepia(0) contrast(1.2); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(20, 20, 22, 0.8);
+            border: 1px solid var(--border-color);
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid rgba(192, 160, 98, 0.1); }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(20, 20, 22, 0.8); padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .related-links a {
+            display: block; color: var(--text-secondary); text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #888;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #444; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>PROFESOR STONEHEART</h1>
+
+            <div class="logline">
+               Lekarz i najwierniejszy doradca Króla Inu.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Atrybut:</strong> Kieszonkowy notatnik w metalowej oprawie i pióro, którym nieustannie coś zapisuje, nawet podczas rozmowy.</li>
+                    <li><strong>Gesty:</strong> Lubi poprawiać okulary.</li>
+                    <li><strong>Mowa:</strong> Formalna.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: NAUKOWIEC</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Stanowisko:</strong> Doradca / Lekarz.</li>
+                    <li><strong>Osiągnięcia:</strong> Wynalazł lek który oczyszcza płuca / To on 15 lat temu przedstawił Inu warunki założenia Solthari.</li>
+                    <li><strong>Reputacja:</strong> Surowy, wymagający, ale genialny. Nikt praktycznie nie wie ,że pomaga władcy.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: CIEŃ TRONU</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Szara Eminencja:</strong> To on filtruje informacje, które trafiają do Króla Inu. Decyduje, kto dostąpi audiencji.</li>
+                    <li><strong>Szef Wywiadu:</strong> Gdy świat się wali ,on samodzielnie szuka rozwiązania.</li>
+                    <li><strong>Lojalność:</strong> Bezwzględnie oddany Królowi. Wierzy, że Inu to jedyna osoba zdolna utrzymać porządek.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ZASOBY I WIEDZA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Alchemia i Inżynieria:</strong> Łączy magię z technologią w sposób, który dla wielu jest herezją.</li>
+                    <li><strong>Archiwum:</strong> Posiada teczki na każdego mieszkańca Zavr.</li>
+                    <li><strong>Laboratoria:</strong> Dostęp do podziemnych kompleksów badawczych.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">RELACJE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Król Inu:</strong> Relacja mistrz-sługa, ale też głęboki szacunek intelektualny. Stoneheart jest jedynym, który widzi słabość Króla.</li>
+                    <li><strong>Emma:</strong> Fascynuje go jej talent. Chciałby ją zrekrutować (lub poddać wiwisekcji, by zrozumieć jej geniusz).</li>
+                    <li><strong>Pera:</strong> Uważa ją za nieprzewidywalną, ale docenia jej skuteczność militarną.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong> Purpuros lub Kety.</li>
+                    <li><strong>Zadanie:</strong> Spisuje co stracili i zyskali przez wojne.</li>
+                    <li><strong>Stan:</strong> Stabilny, czujny.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">⚠ DOKUMENTACJA ZASTRZEŻONA</button>
+            <div class="panel">
+                <div class="redacted-text">
+                    [FRAGMENT USUNIĘTY]<br>
+                    To on powiedział królowi ,że Archtos to może być klucz to dostania księgi z świątyni.
+                    Dzięki niemu Inu wysyła bandę młodziaków na misję.
+                </div>
+            </div>
+
+            <div class="quote-static">
+                „Technologia to też forma magii" 
+            
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/stoneheart.png" alt="Profesor Stoneheart">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Imię</td><td class="infobox-value">Julius Stoneheart</td></tr>
+                <tr><td class="infobox-label">Tytuł</td><td class="infobox-value">Profesor / Doradca</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">55 lat</td></tr>
+                <tr><td class="infobox-label">Frakcja</td><td class="infobox-value" style="color:#c5a059;">Zavr (Korona)</td></tr>
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Szef Wywiadu</td></tr>
+                <tr><td class="infobox-label">Specjalizacja</td><td class="infobox-value">Inżynieria / Polityka</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">POWIĄZANIA</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">ODDANIE</div>
+                <a href="inu.html">Król Inu</a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">ZAINTERESOWANIE</div>
+                <a href="emma.html">Emma</a>
+                <a href="archtos.html">Archtos</a>
+               
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

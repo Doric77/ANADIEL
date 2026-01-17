@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Astelia (Nienawiść)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Oswald:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- STYL AGRESJI --- */
+        :root {
+            --blood-red: #c0392b;    /* Jasna krew */
+            --dried-blood: #641e16;  /* Ciemna krew */
+            --charcoal: #17202a;     /* Węgiel */
+            --rage-glow: #e74c3c;    /* Poświata */
+        }
+
+        body {
+            background-color: #0a0505;
+            color: #ecf0f1;
+            font-family: 'Oswald', sans-serif; /* Ostry, nowoczesny krój */
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        /* --- TŁO (PULS) --- */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: url('../assets/tlo_hate.png') center center / cover no-repeat;
+            filter: grayscale(0.5) contrast(1.5) brightness(0.4);
+            /* Tło delikatnie pulsuje czerwienią */
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        /* Ziarno/Szum (Noise) dla efektu niepokoju */
+        body::after {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idHJhbnNwYXJlbnQiLz48cGF0aCBkPSJNMSAxaDF2MUgxVjF6TTMgM2gxdjFIM1YzeiIgZmlsbD0icmdiYSgyNTUsIDAsIDAsIDAuMDUpIi8+PC9zdmc+');
+            opacity: 0.5; z-index: -1; pointer-events: none;
+        }
+
+        /* --- KONTENER GŁÓWNY (ROZDARTY) --- */
+        .container {
+            max-width: 1000px; width: 100%;
+            display: grid; grid-template-columns: 1.5fr 2fr; gap: 50px;
+            background: rgba(20, 5, 5, 0.9);
+            /* Ostra, czerwona ramka */
+            border-left: 5px solid var(--blood-red);
+            border-right: 5px solid var(--blood-red);
+            box-shadow: 0 0 50px rgba(192, 57, 43, 0.3);
+            padding: 50px;
+            align-items: center;
+            position: relative;
+            
+            /* Efekt "uciętego rogu" (agresywny kształt) */
+            clip-path: polygon(
+                0 0, 95% 0, 100% 5%, 
+                100% 100%, 5% 100%, 0 95%
+            );
+        }
+
+        /* --- LEWA STRONA (PORTRET) --- */
+        .image-section {
+            display: flex; flex-direction: column; align-items: center; position: relative;
+        }
+
+        .portrait-container {
+            width: 280px; height: 350px;
+            position: relative;
+            border: 2px solid var(--dried-blood);
+            overflow: hidden;
+            transform: rotate(-2deg); /* Lekkie przekrzywienie dla niepokoju */
+            transition: 0.3s;
+        }
+
+        .portrait-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: contrast(1.2) sepia(0.3) hue-rotate(-30deg);
+            transition: 0.5s;
+        }
+
+        /* Czerwone oczy/poświata po najechaniu */
+        .portrait-container:hover {
+            border-color: var(--blood-red);
+            box-shadow: 0 0 30px var(--blood-red);
+            transform: rotate(0deg) scale(1.02);
+        }
+        .portrait-container:hover img {
+            filter: contrast(1.4) brightness(1.1);
+        }
+
+        .title-tag {
+            margin-top: 25px;
+            font-family: 'Cinzel', serif;
+            color: var(--blood-red);
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0px #000;
+            background: rgba(192, 57, 43, 0.1);
+            padding: 5px 15px; border: 1px solid var(--dried-blood);
+        }
+
+        /* --- PRAWA STRONA (TEKST) --- */
+        .text-section { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: #fff;
+            margin: 0; font-weight: 900; letter-spacing: 2px;
+            /* Czerwony Gradient */
+            background: linear-gradient(to bottom, #e74c3c, #641e16);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Animacja drżenia (Wściekłość) */
+            animation: tremble 0.2s infinite;
+            filter: drop-shadow(0 0 5px rgba(192, 57, 43, 0.8));
+        }
+
+        .quote {
+            font-style: italic; color: #e6b0aa; font-size: 1.1rem;
+            border-left: 4px solid var(--blood-red);
+            padding-left: 20px; margin: 10px 0 25px 0;
+            background: linear-gradient(90deg, rgba(192, 57, 43, 0.1), transparent);
+            padding: 15px;
+        }
+
+        .lore-text {
+            line-height: 1.7; font-size: 1rem; color: #d0d3d4;
+            text-align: justify;
+        }
+
+        .highlight { 
+            color: var(--blood-red); font-weight: 700; 
+            text-decoration: underline; text-decoration-color: var(--dried-blood);
+        }
+
+        /* --- STATYSTYKI (PASEK STANU) --- */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr; gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-row {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px dashed var(--dried-blood); padding-bottom: 5px;
+        }
+        .stat-label { text-transform: uppercase; color: #922b21; font-weight: 700; }
+        .stat-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 5px var(--blood-red); }
+
+        /* --- PRZYCISK --- */
+        .back-btn {
+            margin-top: 35px; color: #fff; text-decoration: none;
+            font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
+            border: 2px solid var(--blood-red);
+            padding: 15px 40px; display: inline-block; text-align: center;
+            transition: 0.2s; background: var(--dried-blood);
+            clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%, 0% 20%);
+        }
+        .back-btn:hover { 
+            background: var(--blood-red); 
+            box-shadow: 0 0 30px var(--blood-red); 
+            transform: translateX(5px);
+        }
+
+        /* --- ANIMACJE --- */
+        @keyframes tremble {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(-1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes pulseBg {
+            0% { box-shadow: inset 0 0 0 rgba(192, 57, 43, 0); }
+            100% { box-shadow: inset 0 0 100px rgba(192, 57, 43, 0.4); }
+        }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; text-align: center; border: none; }
+            .lore-text { text-align: left; }
+            .portrait-container { transform: rotate(0); margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="image-section">
+            <div class="portrait-container">
+                <img src="../assets/god_hate.png" alt="Astelia">
+            </div>
+            <div class="title-tag">Awatar Nienawiści</div>
+        </div>
+
+        <div class="text-section">
+            
+            <h1>ASTELIA</h1>
+            
+            <div class="quote">
+                „Ehhh ,życie na ziemi było takie przyjemne i beztroskie ,nienawidze swojej roboty...”
+            </div>
+
+            <div class="lore-text">
+                Przyzwana przez pomyłke ,założyła rodzine z człowiekiem jednak Astelia to <span class="highlight">chodzący gniew</span>. gdy jej przykrywka zaczęła pękać pod wpływem alkocholu wszystko zaczęło się sypać.
+                <br><br>
+                Wiem ,że inne awatary będą chciały po mnie przyjść ,ale póki mogę to zatrzymać to dlaczego miałabym tego nie robić.
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-row">
+                    <span class="stat-label">Tożsamość</span>
+                    <span class="stat-val">Astelia (Matka Emmy)</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Rola</span>
+                    <span class="stat-val">Naczynie Boga</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Moc</span>
+                    <span class="stat-val">Zmiennokształtność / Piekielne moce</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Status</span>
+                    <span class="stat-val" style="color:red;">ZAGROŻENIE OMEGA</span>
+                </div>
+            </div>
+
+            <a href="bogowie.html" class="back-btn">UCIECZKA</a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

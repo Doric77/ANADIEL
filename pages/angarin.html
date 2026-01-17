@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Angarin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA ANGARINA (ZŁOTO / KREW / MĘCZEŃSTWO) --- */
+        :root {
+            --accent: #d4ac0d;                 /* Stare, ciemne złoto */
+            --accent-blood: #922b21;           /* Zakrzepła krew */
+            --bg-panel: rgba(20, 15, 10, 0.95);
+            --text-primary: #fcf3cf;
+            
+            --border-color: rgba(212, 172, 13, 0.31);
+        }
+
+        /* --- BAZA I TŁO (ZOPTYMALIZOWANE) --- */
+        body {
+            background-color: #0a0500;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(10, 5, 0, 0.2)), 
+                url('../assets/angarin_tlo.png');
+            background-size: cover;
+            background-position: center;
+            
+            filter: blur(1px); 
+            transform: scale(1.05);
+            will-change: transform;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3.5rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--accent);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.2rem; font-weight: 500; font-style: italic;
+            background: rgba(212, 172, 13, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 25px; color: #f9e79f;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #1a1505, #0f0a00); 
+            color: #d4ac0d;
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid #443300; border-left: 4px solid #7d6608;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #2b2205;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(15, 12, 5, 0.6);
+            border: 1px solid #443300; border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* SEKCJA BÓLU (CZERWONA) */
+        .pain-header { border-left-color: var(--accent-blood) !important; color: #e74c3c; }
+        .pain-header:hover, .pain-header.active { background: #2b0505; border-left-color: #ff3333 !important; }
+
+        /* SEKRETY */
+        .accordion.redacted { opacity: 0.8; color: #d4ac0d; font-family: 'Cinzel', serif; letter-spacing: 2px; }
+        .redacted-text {
+            font-family: 'Cinzel', serif; text-align: center; padding: 30px;
+            color: #f1c40f; background: rgba(212, 172, 13, 0.1); 
+            font-style: italic; border: 1px dashed var(--accent);
+        }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.4rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; position: relative;
+        }
+        .quote-static::before, .quote-static::after {
+            content: ''; display: block; height: 1px; width: 50%; margin: 20px auto;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s ease; filter: sepia(0.3) contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.03); filter: sepia(0); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.95rem; background: rgba(25, 20, 10, 0.8);
+            border: 1px solid var(--border-color);
+        }
+        .infobox td { padding: 15px; border-bottom: 1px solid rgba(212, 172, 13, 0.2); }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(25, 20, 10, 0.8); padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700; letter-spacing: 1px;
+        }
+        .related-links a {
+            display: block; color: #f9e79f; text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .related-links a:hover { color: #fff; padding-left: 10px; text-shadow: 0 0 5px var(--accent); }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #d4ac0d;
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px; border: 1px solid #7d6608;
+            padding: 10px 20px; text-align: center;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(212, 172, 13, 0.1); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>ANGARIN</h1>
+
+            <div class="logline">
+                Mnich z Val'Serin ,który za prawdę płaci cierpieniem.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Wychudzony mężczyzna w prostych szatach mnicha. Jego ciało pod materiałem jest mapą bólu – pokryte świeżymi ranami i starymi bliznami.</li>
+                    <li><strong>Atrybut:</strong> Zakazana wiedza.</li>
+                    <li><strong>Milczenie:</strong> Jego każde słowo musi być przemyślane by nie zachaczać o zakazaną wiedzę.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA: MĘCZENNIK</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Potęga wiedzy:</strong> Jest kluczem do uratowania Verta.</li>
+                    <li><strong>Człowieczeństwo:</strong>Mimo ,że jest karany przez samą Boginią , nie traci swojej duszy.</li>
+                    <li><strong>Poświęcenie:</strong> Dla Elysii ryzykuje gniewem bogini.</li>
+                </ul>
+            </div>
+
+            <button class="accordion pain-header">CENA WIEDZY</button>
+            <div class="panel">
+                <p>
+                    Bogini dokładnie wie ,kiedy Angarin mówi to czego nie powinien.
+                </p>
+                <ul>
+                    <li><strong>Fizyczna Zapłata:</strong> Każde najmniejsze wspomnienie o zakazanej wiedzy kończy się uszczerpikiem na zdrowiu.</li>
+                    <li><strong>Znęcanie się:</strong> Bogini znęca się nad nim psychicznie ,by go złamać i by przestał zdradzać sekrety.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ZAKAZANE UCZUCIE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Elysia:</strong> Zakochał się w niej, widząc jej determinację i czystość serca. Dla niej znosi tortury Bogini.</li>
+                    <li><strong>Tragedia:</strong> Wie ,że dopóki "Ona patrzy" w jego życiu nie ma cienia szans na spokój.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong> Fontanna na obrzerzach Stolicy .</li>
+                    <li><strong>Stan:</strong> Ma liczne rany ,a jego oczy zasłonięte są hustą prawdopodobnie stracił oczy.</li>
+                    <li><strong>Zadanie:</strong> Pomóc bohaterom.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">⚠ WIEDZA ZAKAZANA</button>
+            <div class="panel">
+                <div class="redacted-text">
+                    Angaranin zrobi wszystko by pozbyć się obecności bogini ze swojego życia<br>
+                    
+                </div>
+            </div>
+
+            <div class="quote-static">
+                "To wszystko moja wina"
+            </div>
+
+            <a href="postacie_drugoplanowe.html" class="back-btn">← WRÓĆ DO POSTACI DRUGOPLANOWYCH</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/angarin.png" alt="Angarin">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Pochodzenie</td><td class="infobox-value">Val'Serin</td></tr>
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Mnich / Objawiony</td></tr>
+                <tr><td class="infobox-label">Bóstwo</td><td class="infobox-value" style="color:#922b21;">Yashara</td></tr>
+                <tr><td class="infobox-label">Motywacja</td><td class="infobox-value">Miłość do Elysii</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Przeklęty</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">POWIĄZANIA</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">UKOCHANA</div>
+                <a href="elysia.html">
+                    Księżniczka Elysia
+                    <span style="display:block; font-size:0.75rem; color:#fcf3cf; font-weight:400;">Światło w jego mroku.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">BYLI SOJUSZNICY</div>
+                <a href="feliks.html">
+                    Feliks
+                    <span style="display:block; font-size:0.75rem; color:#d4ac0d; font-weight:400;">Gdyby nie ja, Feliks nic by nie zrobił...</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

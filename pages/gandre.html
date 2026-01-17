@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Król Gandre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA GANDRE (KAMIEŃ / MŁODOŚĆ / ODPOWIEDZIALNOŚĆ) --- */
+        :root {
+            --accent: #78909c;                 /* Szaro-Niebieski (Kamień/Stal) */
+            --bg-panel: rgba(15, 20, 25, 0.95);
+            --text-primary: #e0e0e0;
+            --border-color: rgba(120, 144, 156, 0.3);
+        }
+
+        /* --- BAZA I TŁO (ZOPTYMALIZOWANE) --- */
+        body {
+            background-color: #080a0c;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(10, 15, 20, 0.9)), 
+                url('../assets/gandre_tlo.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(1px); transform: scale(1.05); will-change: transform;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.1rem; font-weight: 500; font-style: italic;
+            background: rgba(120, 144, 156, 0.1);
+            border-left: 5px solid var(--accent);
+            padding: 20px; color: #cfd8dc;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #151a1e, #0f1214); 
+            color: #b0bec5;
+            cursor: pointer; padding: 15px 20px; width: 100%;
+            border: 1px solid #333; border-left: 4px solid #37474f;
+            text-align: left; outline: none; font-size: 1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #1e262b;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(10, 10, 12, 0.6);
+            border: 1px solid #333; border-top: none;
+            display: none; overflow: hidden; line-height: 1.6;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 20px 0; }
+        .panel li { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* CYTAT */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.2rem;
+            font-style: italic; color: #aaa; padding: 30px 20px; margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 1px solid var(--accent);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.5s ease; filter: contrast(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.02); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; background: rgba(20, 25, 30, 0.8);
+            border: 1px solid #333;
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid #333; }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(20, 25, 30, 0.8); padding: 20px;
+            border: 1px solid #333;
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #90a4ae; text-decoration: none;
+            padding: 5px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .related-links a:hover { color: #fff; padding-left: 5px; }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #888;
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; border: 1px solid #444; padding: 10px 20px;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>KRÓL GANDRE</h1>
+
+            <div class="logline">
+                Młody władca Val'Serin, który odziedziczył koronę z popiołów. 
+                W wieku 13 lat musiał stawić czoła gniewowi Królowej Keli ,prawie oddał swoje życie za pokój.
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wygląd:</strong> Młody mężczyzna o zmęczonych oczach. Nosi koronę ojca, która wydaje się na niego nieco za duża, jakby symbolizowała ciężar dziedzictwa.</li>
+                    <li><strong>Strój:</strong> Szaty Val'Serinu.</li>
+                    <li><strong>Zachowanie:</strong> Nerwowy, ale zdeterminowany. Często spogląda na mapy, szukając wyjścia z sytuacji bez wyjścia.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">DZIEDZICTWO HARONA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Nagła Władza:</strong> Przejął tron po śmierci ojca (Harona), w najgorszym możliwym momencie w niezbyt dobrym momencie dla Val'Serinu</li>
+                    <li><strong>Oskarżenie:</strong> Val'Serin jest obwiniane o śmierć Księżniczki Kloi. Gandre wie, że jego ludzie są niewinni, ale nie ma dowodów, by przekonać Keli przez co widać napięcie między tymi krajami.</li>
+                    <li><strong>Cel:</strong> Przetrwać. Nie szuka podbojów, chce tylko odbudować dom.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">RELACJE I SOJUSZE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Haron (Ojciec):</strong> Kochał go i szanował, ale czuje żal, że zostawił go z takim bałaganem.</li>
+                    <li><strong>Królowa Keli:</strong> Jest jej wdzieczny za darowanie życia ,ale żadko spogląda jej w oczy.</li>
+                    <li><strong>Inni Władcy:</strong> Szuka wsparcia u Verta z Ernoyi, licząc na starą przyjaźń narodów, ale polityka to gra interesów, nie sentymentów.</li>
+                </ul>
+            </div>
+
+            <div class="quote-static">
+                „Za szybko". <br>
+            </div>
+
+            <a href="wladcy.html" class="back-btn">← WRÓĆ DO WŁADCÓW</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/gandre.png" alt="Król Gandre">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Tytuł</td><td class="infobox-value" style="color:#78909c;">KRÓL VAL'SERIN</td></tr>
+                <tr><td class="infobox-label">Wiek</td><td class="infobox-value">27 lat</td></tr>
+                <tr><td class="infobox-label">Rasa</td><td class="infobox-value">Człowiek</td></tr>
+                <tr><td class="infobox-label">Poprzednik</td><td class="infobox-value">Haron (Ojciec)</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value">Regent / Żywy</td></tr>
+                <tr><td class="infobox-label">Debiut</td><td class="infobox-value">Rozdzial II</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">POWIĄZANIA</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">RODZINA</div>
+                <a href="haron.html">
+                    Król Haron
+                    <span style="display:block; font-size:0.75rem; color:#90a4ae; font-weight:400;">Zmarły ojciec.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">NAPIĘCIE</div>
+                <a href="keli.html">
+                    Królowa Keli
+                    <span style="display:block; font-size:0.75rem; color:#90a4ae; font-weight:400;">Trochę się jej boi.</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>

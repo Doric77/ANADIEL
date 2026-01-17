@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Akayomi & Yune</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA DUCHÓW (MGŁA / VAL'SERIN / ETYRYCZNOŚĆ) --- */
+        :root {
+            --accent: #b3e5fc;                 /* Blady, trupi błękit */
+            --accent-dark: #546e7a;            /* Szary granat */
+            --accent-glow: rgba(179, 229, 252, 0.3); /* Mglista poświata */
+            
+            --bg-main: #050505;                /* Głęboka czerń */
+            --bg-panel: rgba(10, 15, 20, 0.85); /* Ciemne szkło */
+            --bg-element: linear-gradient(90deg, #10151a, #0a0e12);
+            
+            --text-primary: #eceff1;           /* Złamana biel */
+            --text-secondary: #90a4ae;         /* Szary błękit */
+            
+            --border-color: rgba(179, 229, 252, 0.2);
+            --spoiler: #cfd8dc;
+        }
+
+        /* --- BAZA I TŁO --- */
+        body {
+            /* Tło mroczne, zamglone */
+            background: 
+                radial-gradient(circle at top, rgba(100, 120, 130, 0.15) 0%, #000 80%),
+                url('../assets/duchy_tlo.png');
+            
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* --- GŁÓWNY KONTENER --- */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            
+            background: var(--bg-panel);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 40px rgba(0,0,0,1), inset 0 0 50px rgba(179, 229, 252, 0.05);
+            padding: 40px;
+            border-radius: 4px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #fff;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                0 0 10px var(--accent),
+                0 0 20px rgba(255,255,255,0.5);
+            position: relative;
+        }
+
+        h1::after {
+            content: ''; display: block; width: 100%; height: 1px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin-top: 15px;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* LOGLINE */
+        .logline {
+            font-size: 1.25rem; font-weight: 500; font-style: italic;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent);
+            border-left: 4px solid var(--accent);
+            padding: 25px; color: #eceff1;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: var(--bg-element); 
+            color: var(--text-secondary);
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-left: 4px solid #37474f;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: linear-gradient(90deg, rgba(179, 229, 252, 0.1), rgba(0,0,0,0));
+            border-left: 4px solid var(--accent); 
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 15px rgba(179, 229, 252, 0.1);
+        }
+
+        .accordion::after { content: '+'; color: var(--accent); font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); }
+
+        .panel {
+            padding: 0 25px; 
+            background-color: rgba(5, 10, 15, 0.6);
+            border: 1px solid var(--border-color); border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px;}
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* Status Fabularny - ETERYCZNY */
+        .status-header { border-left-color: #fff !important; }
+        .status-header:hover, .status-header.active { 
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
+            text-shadow: 0 0 10px #fff;
+        }
+
+        /* Redacted - ZAMGLONE */
+        .accordion.redacted { 
+            border-color: #546e7a; color: #78909c; opacity: 0.7; 
+            font-family: 'Courier New', monospace;
+        }
+        .redacted-text {
+            color: #fff; font-family: 'Courier New', monospace;
+            text-align: center; padding: 30px; letter-spacing: 3px;
+            text-shadow: 0 0 5px #fff; opacity: 0.5;
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Cytat */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.5rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; position: relative;
+        }
+        .quote-static::before, .quote-static::after {
+            content: ''; display: block; height: 1px; width: 60%; margin: 20px auto;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            box-shadow: 0 0 5px var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; 
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 20px rgba(179, 229, 252, 0.2);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s ease;
+            filter: grayscale(20%) contrast(1.1) brightness(1.1);
+        }
+        .char-image-container:hover img { transform: scale(1.05); filter: grayscale(0%); }
+
+        .img-label {
+            position: absolute; bottom: 0; width: 100%;
+            background: rgba(0,0,0,0.7); color: #fff;
+            text-align: center; padding: 5px;
+            font-family: 'Cinzel', serif; letter-spacing: 2px;
+            font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* INFOBOX */
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.9rem; 
+            background: rgba(10, 15, 20, 0.8);
+            border: 1px solid var(--border-color); 
+        }
+        .infobox td { padding: 12px; border-bottom: 1px solid rgba(179, 229, 252, 0.1); }
+        .infobox tr:last-child td { border-bottom: none; }
+
+        .infobox-label { 
+            font-weight: 700; color: var(--accent); text-transform: uppercase; 
+            letter-spacing: 1px; font-size: 0.75rem; width: 45%;
+        }
+        .infobox-value { color: #fff; text-align: right; font-weight: 600; }
+
+        /* LINKI */
+        .related-links {
+            background: rgba(10, 15, 20, 0.8); padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+            margin-bottom: 15px; font-weight: 800; letter-spacing: 2px;
+        }
+        .related-links a {
+            display: block; color: var(--text-secondary); text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .related-links a:hover { 
+            color: #fff; padding-left: 10px; border-bottom: 1px solid var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #90a4ae;
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px; border: 1px solid #37474f;
+            padding: 10px 20px; text-align: center;
+        }
+        .back-btn:hover { 
+            color: #fff; border-color: var(--accent); 
+            background: rgba(179, 229, 252, 0.1);
+            text-shadow: 0 0 10px var(--accent); 
+        }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; padding: 20px; }
+            .sidebar { order: -1; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>AKAYOMI & YUNE</h1>
+
+            <div class="logline">
+                Strażniczki Gier z Val'Serin. Ofiary okrucieństwa "Pani", które w swym obłędzie biorą kata za opiekunkę. 
+            </div>
+
+            <button class="accordion">IDENTYFIKATORY SCENICZNE</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Yune (Młodsza):</strong> Ściska zniszczonego, pluszowego smoka o pięciu głowach. Mówi z upiorną, dziecięcą naiwnością.</li>
+                    <li><strong>Akayomi (Starsza):</strong> Bardziej świadoma, tłumaczy zasady "gier". Jej głos brzmi jak szept wielu osób naraz.</li>
+                    <li><strong>Dźwięk:</strong> Chichot, który zmienia się z piskliwego w nienaturalnie niski. Odgłos spadających kości.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">HISTORIA I ŚMIERĆ</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Pochodzenie:</strong> Dzieci zakonników ,którzy zdradzili "Panią".</li>
+                    <li><strong>Śmierć:</strong> Zginęły w męczarniach, prawdopodobnie z głodu. "Pani" wmówiła im, że to konieczne poświęcenie.</li>
+                    <li><strong>Iluzja:</strong> Wierzą, że służba w Świątyni to zaszczyt. Nie widzą swojego więzienia – widzą dom.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ZNIEKSZTAŁCENIA (SYNDROM SZTOKHOLMSKI)</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Wypaczona Miłość:</strong> Wierzą, że "Pani" je kochała i płakała nad ich losem (mimo że sama go zgotowała).</li>
+                    <li><strong>Odrzucenie Prawdy:</strong> Każda próba uświadomienia im, że zostały zamordowane, spotyka się z agresją lub wyparciem.</li>
+                    <li><strong>Nel:</strong> Jedyna, która się zbuntowała. Akayomi i Yune wspominają ją jako patronkę ,która starała się je "ocalić".</li>
+                </ul>
+            </div>
+
+            <button class="accordion">ROLA W ŚWIĄTYNI</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Narratorki:</strong> Inscenizują historię upadku świątyni poprzez śmiertelne "gry".</li>
+                    <li><strong>Strażniczki:</strong> Nie atakują wprost, ale prowadzą intruzów w pułapki (Smok z Mgły). Zrzucają kości na nieostrożnych.</li>
+                    <li><strong>Cel:</strong> Przetestować "gości" ,zagłodzić swoją nudę.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">MOCE I UMIEJĘTNOŚCI</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Manifestacja Iluzji:</strong> Tworzą potwory z mgły i wspomnień (Pluszowy Smok staje się bossem).</li>
+                    <li><strong>Telekineza:</strong> Mogą poruszać przedmiotami w świątyni (kości, kamienie).</li>
+                    <li><strong>Nietułaczka:</strong> Są związane ze świątynią. Nie mogą zostać zniszczone konwencjonalnie, dopóki klątwa "Pani" trwa.</li>
+                     <li><strong>Niewidzialność:</strong> Potrafią pojawiać się i znikać oraz przechodzić przez ściany.</li>
+                </ul>
+            </div>
+
+            <button class="accordion status-header">STATUS FABULARNY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Lokalizacja:</strong> Nieznana.</li>
+                    <li><strong>Stan:</strong> Pod obieką Suntosa.</li>
+                    <li><strong>Zadanie:</strong> Skończone.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">⚠ FRAGMENTY USUNIĘTE</button>
+            <div class="panel">
+                <div class="redacted-text">
+                    Dziewczynki zostały zmanipulowane przez Panią by chronić księgi piekła ,podczas gdy ona założyła nowy zakon i nawet ich nie odwiedzała.
+                    Pani to bogini Yashara
+                </div>
+            </div>
+
+            <div class="quote-static">
+                „Pani powiedziała ,że odpokutowywujemy grzechy naszych rodziców”
+            </div>
+
+            <a href="antagonisci.html" class="back-btn">← WRÓĆ DO GALERII CIENI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/duch1.png" alt="Akayomi">
+                <div class="img-label">AKAYOMI (STARSZA)</div>
+            </div>
+
+            <div class="char-image-container">
+                <img src="../assets/duch2.png" alt="Yune">
+                <div class="img-label">YUNE (MŁODSZA)</div>
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Zagrożenie</td><td class="infobox-value" style="color:#b3e5fc;">DUCHOWE / PUŁAPKI</td></tr>
+                <tr><td class="infobox-label">Rasa</td><td class="infobox-value">Duchy Dzieci / Ludzie</td></tr>
+                <tr><td class="infobox-label">Pochodzenie</td><td class="infobox-value">Val'Serin</td></tr>
+                <tr><td class="infobox-label">Rola</td><td class="infobox-value">Strażniczki Księgi Piekła</td></tr>
+                <tr><td class="infobox-label">Pan</td><td class="infobox-value">"Pani" (Wspomnienie) / bogini Yashara</td></tr>
+                <tr><td class="infobox-label">Atrybut</td><td class="infobox-value">Pluszowy Smok</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">SIECI POWIĄZAŃ</div>
+                
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:10px; opacity:0.8;">OPRAWCY</div>
+                <a href="yashara.html">
+                    Yashara
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Morderczyni, którą kochają.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">POWIĄZANE</div>
+                <a href="nel.html">
+                    Nel
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Ta, która się zbuntowała i próbowała je ocalić.</span>
+                </a>
+                
+                <div style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-top:20px; opacity:0.8;">ZAGROŻENIA</div>
+                <a href="archtos.html">
+                    Archtos
+                    <span style="display:block; font-size:0.75rem; color:#888; font-weight:400;">Myślały ,że je spali ,a on je uwolnił.</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                // USUNĄŁEM LINIJKĘ BLOKUJĄCĄ "REDACTED"
+                
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                
+                if (panel.style.display === "block") { 
+                    panel.style.display = "none"; 
+                } else { 
+                    panel.style.display = "block"; 
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

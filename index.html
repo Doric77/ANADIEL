@@ -3,132 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANADIEL - Wiki</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <title>ANADIEL - Wiki Uniwersum</title>
+    <link href="pages/https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* TŁO I PODSTAWY */
+        /* --- RESET I BAZA --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            margin: 0;
-            padding: 0;
+            font-family: 'Raleway', sans-serif;
+            background-color: #050505;
+            color: #fff;
             height: 100vh;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Raleway', sans-serif;
-            color: white;
-            text-align: center;
+            position: relative;
+        }
 
-            /* Pamiętaj o zdjęciu w folderze assets! */
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('assets/tlo.png');
+        /* --- TŁO I EFEKTY --- */
+        .parallax-bg {
+            position: absolute;
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            background: url('../assets/tlo.png') no-repeat center center;
             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            z-index: -3;
+            transition: transform 0.1s ease-out;
+            filter: brightness(0.4) blur(1px); /* Lekki blur żeby kafelki były czytelne */
         }
 
-        /* TYTUŁ GŁÓWNY */
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 80px;
-            letter-spacing: 12px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            cursor: default;
-        }
-
-        /* KOLORY LITER TYTUŁU */
-        .litera-1 { color: #d699ff; text-shadow: 0 0 25px #d699ff; }
-        .litera-2 { color: #b366ff; }
-        .litera-3 { color: #8c1aff; }
-        .litera-4 { color: #6600cc; }
-        .litera-5 { color: #400080; }
-        .litera-6 { color: #26004d; }
-        .litera-7 { color: #05000a; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
-
-        /* NOWY OPIS */
-        .opis {
-            font-size: 20px;
-            line-height: 1.8;
-            max-width: 900px; /* Szerokość tekstu */
-            padding: 0 20px;
-            text-shadow: 2px 2px 4px black; /* Cień pod tekstem dla lepszej czytelności */
-            font-weight: 500;
-        }
-
-        /* KOLORY IMION */
-        .imie-cade { 
-            color: #9d00ff; /* Fiolet */
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(157, 0, 255, 0.4);
+        .particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
         }
         
-        .imie-lyra { 
-            color: #2ecc71; /* Soczysta zieleń */
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        .particle {
+            position: absolute;
+            bottom: -10px;
+            background: rgba(255, 215, 0, 0.6); /* Złotawe iskry */
+            box-shadow: 0 0 10px rgba(255, 165, 0, 0.8);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
         }
 
-        .imie-archtos { 
-            color: #f1c40f; /* Złoty żółty */
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+        /* --- KONTENER GŁÓWNY --- */
+        .main-container {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
         }
 
-        .imie-emma { 
-            color: #00d2ff; /* Błyskawiczny błękit */
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
-        }
-
-        /* MENU / PRZYCISKI */
-        .menu {
-            margin-top: 50px;
-        }
-
-        .przycisk {
-            color: #d699ff;
-            text-decoration: none;
-            border: 1px solid #d699ff;
-            padding: 12px 30px;
-            margin: 0 15px;
+        /* --- TYTUŁ "WYGASAJĄCY W CZERŃ" --- */
+        h1 {
             font-family: 'Cinzel', serif;
-            font-size: 14px;
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            
+            /* NOWY GRADIENT: Od bieli (z lewej) do czerni (z prawej) */
+            background: linear-gradient(to right, #e5c5ff 10%, #a078ff 50%, #6d2eff 85%, #000000 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* NOWE CIENIOWANIE DLA CZYTELNOŚCI */
+            /* Usuwamy stary 'filter drop-shadow', bo był za ciężki dla czarnych liter */
+            filter: none; 
+            
+            /* Dodajemy 'text-shadow':
+               1. Cienka, jasna linia (0 0 1px...) obrysowuje litery, żeby czarne końcówki były widoczne.
+               2. Rozmyty czarny cień (0 0 25px...) dodaje głębi pod spodem. */
+            text-shadow: 
+                0 0 1px rgba(255, 255, 255, 0.3),
+                0 0 25px rgba(0, 0, 0, 0.8);
+            
+            /* Zostawiamy pulsowanie, wygląda dobrze z tym efektem */
+            animation: titlePulse 5s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            letter-spacing: 8px;
+            color: #d7dbdd;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,1);
+        }
+
+        /* --- SIATKA KAFELKÓW (GRID) --- */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 kolumny */
+            gap: 20px;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* --- POJEDYNCZY KAFELEK --- */
+        .nav-card {
+            position: relative;
+            height: 200px; /* Wysokość kafelka */
+            border-radius: 4px;
+            
+            /* Stylizacja tekstu i układu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            overflow: hidden;
+            
+            /* Ramka i cień */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* TŁA DLA POSZCZEGÓLNYCH KAFELKÓW */
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: 0.5s;
+            filter: grayscale(0.8) brightness(0.6); /* Domyślnie szare i ciemne */
+            z-index: 1;
+        }
+
+        /* Przypisanie obrazków */
+        .card-postacie::before    { background-image: url('../assets/b1_tlo.png'); }
+        .card-lokacje::before     { background-image: url('../assets/b2_tlo.png'); }
+        .card-bestiariusz::before { background-image: url('../assets/b3_tlo.png'); }
+        .card-przedmioty::before  { background-image: url('../assets/b4_tlo.png'); }
+        .card-czas::before        { background-image: url('../assets/b5_tlo.png'); }
+        .card-mapy::before        { background-image: url('../assets/b6_tlo.png'); }
+
+        /* NAPIS NA KAFELKU */
+        .nav-card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #ecf0f1;
+            z-index: 2;
+            text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 0 2px 10px #000;
             transition: 0.3s;
-            background: rgba(0,0,0,0.5); /* Lekkie tło przycisku */
         }
 
-        .przycisk:hover {
-            background-color: #d699ff;
-            color: black;
-            box-shadow: 0 0 20px #d699ff;
+        /* EFEKT HOVER (NAJECHANIE MYSZKĄ) */
+        .nav-card:hover {
+            transform: translateY(-5px);
+            border-color: #f1c40f;
+            box-shadow: 0 15px 40px rgba(241, 196, 15, 0.2);
         }
 
+        .nav-card:hover::before {
+            filter: grayscale(0) brightness(1); /* Odzyskuje kolor i jasność */
+            transform: scale(1.1); /* Lekkie przybliżenie tła */
+        }
+
+        .nav-card:hover h2 {
+            color: #f1c40f;
+            letter-spacing: 4px; /* Rozstrzelenie liter */
+        }
+
+        /* --- STOPKA --- */
+        footer {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+        }
+
+        /* --- RESPONSYWNOŚĆ --- */
+        @media (max-width: 900px) {
+            h1 { font-size: 3rem; }
+            .nav-grid { grid-template-columns: repeat(2, 1fr); } /* 2 kolumny na tablecie */
+        }
+        @media (max-width: 600px) {
+            .nav-grid { grid-template-columns: 1fr; } /* 1 kolumna na telefonie */
+            .nav-card { height: 120px; }
+        }
+
+        /* --- KLUCZOWE ANIMACJE --- */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1); opacity: 0; }
+        }
+        @keyframes titlePulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
     </style>
 </head>
 <body>
 
-    <h1>
-        <span class="litera-1">A</span><span class="litera-2">N</span><span class="litera-3">A</span><span class="litera-4">D</span><span class="litera-5">I</span><span class="litera-6">E</span><span class="litera-7">L</span>
-    </h1>
+    <div class="parallax-bg" id="bg"></div>
+    <div class="particles" id="particles"></div>
 
-    <div class="opis">
-        „Wkrocz do Soltharii – świata, gdzie ryk maszyn parowych miesza się z szeptem starej magii, 
-        a z mroku Khan'Den wyłaniają się zapomniane koszmary. 
-        Poznaj historię 
-        <span class="imie-cade">Cade'a</span>, 
-        <span class="imie-lyra">Lyry</span>, 
-        <span class="imie-archtos">Archtosa</span> i 
-        <span class="imie-emma">Emmy</span>, 
-        którzy muszą stawić czoła piekłu, zanim to pochłonie wszystko, co kochają.”
-    </div>
+    <main class="main-container">
+        
+        <header>
+            <h1>Anadiel</h1>
+            <div class="subtitle">Kroniki Świata</div>
+        </header>
 
-    <div class="menu">
-        <a href="postacie.html" class="przycisk">POSTACIE</a>
-        <a href="lokacje.html" class="przycisk">LOKACJE</a>
-        <a href="bestiariusz.html" class="przycisk">BESTIARIUSZ</a>
-    </div>
+        <nav class="nav-grid">
+            
+            <a href="pages/postacie.html" class="nav-card card-postacie">
+                <h2>Postacie</h2>
+            </a>
+
+            <a href="pages/lokacje.html" class="nav-card card-lokacje">
+                <h2>Lokacje</h2>
+            </a>
+
+            <a href="pages/bestiariusz.html" class="nav-card card-bestiariusz">
+                <h2>Bestiariusz</h2>
+            </a>
+
+            <a href="pages/przedmioty.html" class="nav-card card-przedmioty">
+                <h2>Przedmioty</h2>
+            </a>
+
+            <a href="pages/os_czasu.html" class="nav-card card-czas">
+                <h2>Oś Czasu</h2>
+            </a>
+
+            <a href="pages/mapy.html" class="nav-card card-mapy">
+                <h2>Mapy</h2>
+            </a>
+
+        </nav>
+
+        <footer>
+            PROJEKT WIKI: WERSJA 1.0
+        </footer>
+
+    </main>
+
+    <script>
+        // GENEROWANIE ISKIER
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50; 
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            const size = Math.random() * 3 + 1 + 'px';
+            const posX = Math.random() * 100 + '%';
+            const duration = Math.random() * 15 + 10 + 's'; 
+            const delay = Math.random() * 10 + 's';
+
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.left = posX;
+            particle.style.animationDuration = duration;
+            particle.style.animationDelay = delay;
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // PARALAKSA MYSZKI
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.getElementById('bg');
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            bg.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+        });
+    </script>
 
 </body>
 </html>

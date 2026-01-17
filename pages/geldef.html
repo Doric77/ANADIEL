@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Geldef</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        /* --- STYL NATURY --- */
+        :root {
+            --life-green: #2ecc71;    /* Szmaragdowy (z HUDa) */
+            --deep-forest: #145a32;   /* Ciemna zieleń */
+            --earth-brown: #8d6e63;   /* Brąz */
+            --bg-organic: #0a150f;    /* Bardzo ciemne tło */
+        }
+
+        body {
+            background-color: var(--bg-organic);
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        /* --- TŁO (LAS) --- */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: url('../assets/tlo_geldef.png') center center / cover no-repeat;
+            /* Zielony filtr na tło */
+            filter: brightness(0.5) sepia(0.3) hue-rotate(80deg) saturate(1.5);
+        }
+
+        /* Animowane zarodniki/świetliki w tle */
+        body::after {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle, var(--life-green) 1px, transparent 1px);
+            background-size: 60px 60px; /* Rzadkie kropki */
+            opacity: 0.4;
+            animation: floatSpores 80s linear infinite;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* --- KONTENER GŁÓWNY --- */
+        .container {
+            max-width: 1000px; width: 100%;
+            display: grid; grid-template-columns: 1.5fr 2fr; gap: 50px;
+            /* Organiczny panel */
+            background: rgba(10, 25, 15, 0.85);
+            backdrop-filter: blur(8px);
+            /* Zielona, miękka poświata zamiast ostrej ramki */
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            box-shadow: 0 0 80px rgba(46, 204, 113, 0.2), inset 0 0 30px rgba(46, 204, 113, 0.1);
+            padding: 50px;
+            align-items: center;
+            position: relative;
+            border-radius: 20px; /* Lekko zaokrąglone rogi */
+        }
+
+        /* Dekoracyjne liście w rogach (zamiast złotych ramek) */
+        .leaf-accent {
+            position: absolute;
+            color: var(--life-green);
+            opacity: 0.5; font-size: 2rem;
+            transition: 0.5s;
+        }
+        .tl { top: 15px; left: 15px; transform: rotate(-45deg); }
+        .tr { top: 15px; right: 15px; transform: rotate(45deg); }
+        .bl { bottom: 15px; left: 15px; transform: rotate(-135deg); }
+        .br { bottom: 15px; right: 15px; transform: rotate(135deg); }
+
+        .container:hover .leaf-accent { opacity: 1; text-shadow: 0 0 10px var(--life-green); }
+
+
+        /* --- LEWA STRONA (OBRAZ) --- */
+        .image-section {
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .portrait-container {
+            width: 280px; height: 280px;
+            position: relative;
+            border-radius: 50%;
+            padding: 8px;
+            /* Gradient zieleni i brązu */
+            background: linear-gradient(135deg, var(--life-green), var(--deep-forest));
+            box-shadow: 0 0 60px rgba(46, 204, 113, 0.4);
+        }
+
+        .portrait-container img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e8f5e9; /* Bardzo jasna zieleń wewnątrz */
+        }
+
+        /* AUREOLA (Pulsująca, żywa) */
+        .halo {
+            position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px;
+            border: 2px solid var(--life-green);
+            border-radius: 50%;
+            /* Efekt "oddychania" */
+            animation: pulseLife 6s ease-in-out infinite;
+            box-shadow: 0 0 20px var(--life-green), inset 0 0 20px var(--life-green);
+            opacity: 0.7;
+        }
+
+        .title-tag {
+            margin-top: 25px;
+            font-family: 'Cinzel', serif;
+            color: var(--life-green);
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        }
+
+        /* --- PRAWA STRONA (TEKST) --- */
+        .text-section { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: #fff;
+            margin: 0; font-weight: 700; letter-spacing: 2px;
+            /* Zielony Gradient na Tekście */
+            h1 {
+    /* ... inne linie ... */
+    background: linear-gradient(to bottom, #e8f5e9, var(--life-green));
+    -webkit-background-clip: text;
+    background-clip: text; /* <--- DODAJ TĘ LINIJKĘ */
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(46, 204, 113, 0.5));
+}
+        }
+
+        .quote {
+            font-style: italic; color: #aed581; font-size: 1.1rem;
+            border-left: 3px solid var(--life-green);
+            padding-left: 20px; margin: 5px 0 25px 0;
+            opacity: 0.9;
+        }
+
+        .lore-text {
+            line-height: 1.7; font-size: 1rem; color: #e5e7e9;
+            text-align: justify;
+        }
+
+        .highlight { color: var(--life-green); font-weight: 700; }
+
+        /* --- STATYSTYKI --- */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(46, 204, 113, 0.05);
+            padding: 12px; border: 1px solid rgba(46, 204, 113, 0.2);
+            transition: 0.3s; border-radius: 8px;
+        }
+        .stat-box:hover { 
+            background: rgba(46, 204, 113, 0.15); 
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3); 
+            transform: translateY(-3px);
+        }
+
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; color: var(--earth-brown); font-weight: 700; display: block; margin-bottom: 3px; }
+        .stat-value { font-family: 'Cinzel', serif; font-size: 1rem; color: #fff; }
+
+        /* --- PRZYCISK --- */
+        .back-btn {
+            margin-top: 35px; color: var(--life-green); text-decoration: none;
+            font-family: 'Cinzel', serif; font-size: 0.9rem;
+            border: 1px solid var(--life-green);
+            padding: 12px 30px; display: inline-block;
+            transition: 0.3s; background: rgba(0,0,0,0.2);
+            border-radius: 30px;
+        }
+        .back-btn:hover { background: var(--life-green); color: #000; box-shadow: 0 0 25px var(--life-green); }
+
+        /* --- ANIMACJE --- */
+        @keyframes floatSpores {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px -200px; } /* Powolny ruch w górę i w prawo */
+        }
+        @keyframes pulseLife {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 40px var(--life-green); }
+        }
+
+        /* Responsywność */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; text-align: center; }
+            .image-section { margin-bottom: 30px; }
+            .lore-text { text-align: left; }
+            .stats-grid { text-align: left; }
+            .quote { border-left: none; border-top: 2px solid var(--life-green); padding-top: 10px; padding-left: 0; }
+            .leaf-accent { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <span class="material-icons-round leaf-accent tl">eco</span>
+        <span class="material-icons-round leaf-accent tr">eco</span>
+        <span class="material-icons-round leaf-accent bl">eco</span>
+        <span class="material-icons-round leaf-accent br">eco</span>
+
+        <div class="image-section">
+            <div class="portrait-container">
+                <div class="halo"></div>
+                <img src="../assets/god_geldef.png" alt="Geldef">
+            </div>
+            <div class="title-tag">Matka Natura</div>
+        </div>
+
+        <div class="text-section">
+            
+            <h1>GELDEF</h1>
+            
+            <div class="quote">
+                „Natura nigdy nie była zła ,po prostu żyje według własnych zasad.”
+            </div>
+
+            <div class="lore-text">
+                Prastara siła, która istniała, zanim pierwszy człowiek postawił stopę na ziemi Anadiel. Geldef to <span class="highlight">życie w najczystszej postaci</span> – dzikie, nieokiełznane i wieczne. Nie buduje się jej świątyń; jej katedrą jest każdy las, a ołtarzem każde kwitnące drzewo.
+                <br><br>
+                Jest łagodna jak wiosenny deszcz, przez co jej "Dzieci" najbardziej cierpią na brutalności świata.
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Domena</span>
+                    <span class="stat-value">Natura / Wzrost</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Symbol</span>
+                    <span class="stat-value">Liść</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Charakter</span>
+                    <span class="stat-value">Neutralny Dobry</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Żywioł</span>
+                    <span class="stat-value">Ziemia / Flora</span>
+                </div>
+            </div>
+
+            <a href="bogowie.html" class="back-btn">← WRÓĆ DO PANTEONU</a>
+
+        </div>
+
+    </div>
+
+</body>
+</html><!DOCTYPE html>

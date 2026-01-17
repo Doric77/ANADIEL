@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Xyraeth (Śmierć)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Jura:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- STYL NEKROMANCJI --- */
+        :root {
+            --soul-green: #00ff9d;  /* Widmowa zieleń */
+            --grave-grey: #1f0019;  /* Ciemny szary */
+            --bone-white: #420044;  /* Kość */
+            --void-black: #00ebb8;  /* Czerń */
+        }
+
+        body {
+            background-color: var(--void-black);
+            color: var(--bone-white);
+            font-family: 'Jura', sans-serif; /* Techniczny, ale zimny font */
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        /* --- TŁO (MROK) --- */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: url('../assets/tlo_death.png') center center / cover no-repeat;
+            filter: grayscale(0.1) brightness(0.7) contrast(1.2);
+        }
+
+        /* Animowana mgła u dołu */
+        body::after {
+            content: ''; position: fixed; bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(0, 255, 157, 0.1), transparent);
+            filter: blur(20px);
+            animation: pulseMist 10s infinite alternate;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* --- KONTENER GŁÓWNY (GROBOWIEC) --- */
+        .container {
+            max-width: 1000px; width: 100%;
+            display: grid; grid-template-columns: 1.5fr 2fr; gap: 50px;
+            /* Ciemne szkło */
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #333;
+            /* Zielona poświata od spodu */
+            box-shadow: 0 20px 50px rgba(0, 255, 157, 0.15);
+            padding: 50px;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Cienkie linie "celownika" lub runy w rogach */
+        .rune-corner {
+            position: absolute; width: 30px; height: 30px;
+            border: 2px solid var(--soul-green);
+            opacity: 0.6; transition: 0.3s;
+        }
+        .tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .br { bottom: 0; right: 0; border-left: none; border-top: none; }
+        
+        .container:hover .rune-corner { width: 50px; height: 50px; box-shadow: 0 0 15px var(--soul-green); }
+
+
+        /* --- LEWA STRONA (PORTRET Z DUSZAMI) --- */
+        .image-section {
+            display: flex; flex-direction: column; align-items: center; position: relative;
+        }
+
+        .portrait-container {
+            width: 280px; height: 380px; /* Wysoki, smukły kształt (trumna/monolit) */
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            border: 2px solid #444;
+        }
+
+        .portrait-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(0.1) contrast(1.7) brightness(0.8);
+            transition: 0.5s;
+        }
+
+        /* Widmowa aura za zdjęciem */
+        .portrait-container::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--soul-green), transparent 30%);
+            animation: rotateGhost 4s linear infinite;
+            opacity: 0; transition: 0.5s;
+            z-index: 2; mix-blend-mode: overlay;
+        }
+
+        .portrait-container:hover img {
+            filter: grayscale(0) brightness(1.2); /* Ożywa kolorami (zimnymi) */
+        }
+        .portrait-container:hover::before { opacity: 1; }
+        .portrait-container:hover { border-color: var(--soul-green); }
+
+        .title-tag {
+            margin-top: 20px;
+            font-family: 'Cinzel', serif;
+            color: #888;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 5px 20px;
+        }
+
+        /* --- PRAWA STRONA (TEKST) --- */
+        .text-section { display: flex; flex-direction: column; gap: 20px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: #fff;
+            margin: 0; font-weight: 400; letter-spacing: 2px;
+            /* Efekt "zanikającego" tekstu */
+            background: linear-gradient(to top, #666, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+        }
+
+        .quote {
+            font-style: italic; color: var(--soul-green); font-size: 1.1rem;
+            text-align: right; margin: 10px 0 30px 0;
+            opacity: 0.8; font-family: 'Cinzel', serif;
+        }
+
+        .lore-text {
+            line-height: 1.8; font-size: 1rem; color: #bdc3c7;
+            text-align: justify;
+        }
+
+        .highlight { 
+            color: var(--soul-green); font-weight: 600; 
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.4);
+        }
+
+        /* --- STATYSTYKI (LICZNIK DUSZ) --- */
+        .death-stats {
+            display: flex; flex-direction: column; gap: 10px;
+            margin-top: 20px;
+            background: rgba(0,0,0,0.1); padding: 20px;
+            border-left: 2px solid var(--soul-green);
+        }
+
+        .ds-row { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 5px 0; }
+        .ds-label { color: #666; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .ds-val { color: var(--bone-white); font-family: 'Cinzel', serif; }
+
+        /* --- PRZYCISK --- */
+        .back-btn {
+            margin-top: 35px; color: #fff; text-decoration: none;
+            font-family: 'Jura', serif; font-size: 0.9rem; letter-spacing: 2px;
+            background: #111; border: 1px solid #333;
+            padding: 15px 40px; display: inline-block; text-align: center;
+            transition: 0.3s;
+        }
+        .back-btn:hover { 
+            border-color: var(--soul-green); color: var(--soul-green); 
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2); 
+        }
+
+        /* --- ANIMACJE --- */
+        @keyframes rotateGhost {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulseMist {
+            0% { opacity: 0.2; transform: translateY(0); }
+            100% { opacity: 0.5; transform: translateY(-20px); }
+        }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; text-align: center; }
+            .lore-text { text-align: left; }
+            .rune-corner { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="rune-corner tl"></div>
+        <div class="rune-corner br"></div>
+        
+        <div class="image-section">
+            <div class="portrait-container">
+                <img src="../assets/god_death.png" alt="Xyraeth">
+            </div>
+            <div class="title-tag">Drugi Awatar</div>
+        </div>
+
+        <div class="text-section">
+            
+            <h1>XYRAETH</h1>
+            
+            <div class="quote">
+                „Ile biednych ludzi umiera na polach bitew ,mój pan kocha ich smak.”
+            </div>
+
+            <div class="lore-text">
+                Xyraeth lubi bawić się swoimi ofiarami przed <span class="highlight">śmiercią</span>. Jest okrutna i bezwzględna jednak ,spotkanie jej jest niezwykle żadkie.
+                <br><br>
+                To ona odpowiada za śmierć Kloi ,aby krew tak niewinnej istoty zaczęła tworzyć piekielny krąg ,który miał zesłać zastępy demonów na świat w poszukiwaniu ,w jej mniemaniu Astelii uwięzionej na ziemi, ma kultystów w Obliviarze ,z którymi potrafi się komunikować nawet będąc w piekle.
+            </div>
+
+            <div class="death-stats">
+                <div class="ds-row">
+                    <span class="ds-label">Domeny</span>
+                    <span class="ds-val">Śmierć / Cierpienie</span>
+                </div>
+                <div class="ds-row">
+                    <span class="ds-label">Broń</span>
+                    <span class="ds-val">Ona sama</span>
+                </div>
+                <div class="ds-row">
+                    <span class="ds-label">Zagrożenie</span>
+                    <span class="ds-val">BARDZO NIEBEZPIECZNE</span>
+                </div>
+            </div>
+
+            <a href="bogowie.html" class="back-btn">Do zobaczenia wkrótce</a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

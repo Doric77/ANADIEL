@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Panteon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- BAZA --- */
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            position: relative;
+        }
+
+        /* --- TŁO --- */
+        .universe-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('../assets/pantheon_bg.png') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.1);
+            z-index: -2;
+        }
+
+        /* --- UKŁAD SFER (KONTENER) --- */
+        .system-container {
+            position: relative;
+            width: 1000px; height: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- WSPÓLNE STYLE DLA ORBIT (LINIE) --- */
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Żeby nie blokowały klikania */
+        }
+
+        /* ORBITA 1: DOBRA (Złota) */
+        .ring-1 {
+            width: 300px; height: 300px;
+            border: 1px dashed rgba(241, 196, 15, 0.3);
+            animation: spinRight 60s linear infinite;
+        }
+
+        /* ORBITA 2: NEUTRALNA (Srebrna) */
+        .ring-2 {
+            width: 550px; height: 550px;
+            border: 1px solid rgba(149, 165, 166, 0.2);
+            animation: spinLeft 80s linear infinite;
+        }
+
+        /* ORBITA 3: ZŁA (Czerwona) */
+        .ring-3 {
+            width: 800px; height: 800px;
+            border: 1px dotted rgba(192, 57, 43, 0.4);
+            animation: spinRight 100s linear infinite;
+        }
+
+        /* ORBITA 4: WTF (Kolekcjoner - krzywa i dziwna) */
+        .ring-4 {
+            width: 1100px; height: 900px; /* Jajowata */
+            border: 1px dashed rgba(211, 84, 0, 0.15);
+            animation: spinWobble 120s linear infinite;
+        }
+
+        /* --- CENTRUM: DRELWEN --- */
+        .center-god {
+            position: absolute;
+            width: 140px; height: 140px;
+            z-index: 50;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        .center-god img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.6);
+            object-fit: cover; background: #000;
+        }
+        .center-god:hover { transform: scale(1.2); }
+
+        /* --- SATELITY (BOGOWIE) --- */
+        .satellite {
+            position: absolute;
+            width: 80px; height: 80px;
+            top: 50%; left: 50%;
+            margin-top: -40px; margin-left: -40px;
+            cursor: pointer;
+            pointer-events: auto; /* Włączamy klikanie */
+            transition: 0.3s;
+        }
+
+        .satellite img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+            background: #111;
+        }
+
+        /* Kontra do obrotu (żeby ikony były prosto mimo kręcenia się orbity) */
+        .counter-rotate {
+            width: 100%; height: 100%;
+            animation: inherit; /* Dziedziczy czas animacji rodzica */
+            animation-direction: reverse; /* Ale kręci się w drugą stronę */
+        }
+
+        .satellite:hover img { transform: scale(1.4); border-color: #fff; z-index: 100; }
+
+        /* --- POZYCJONOWANIE NA ORBITACH --- */
+        
+        /* ORBITA 1 (Promień ~150px) */
+        .pos-suntos { transform: translate(150px); }
+        .pos-geldef { transform: translate(-150px); }
+
+        /* ORBITA 2 (Promień ~275px) - Trójkąt */
+        .pos-mechavior { transform: rotate(0deg) translate(275px) rotate(0deg); }
+        .pos-yashara   { transform: rotate(120deg) translate(275px) rotate(-120deg); }
+        .pos-neremarth { transform: rotate(240deg) translate(275px) rotate(-240deg); }
+
+        /* ORBITA 3 (Promień ~400px) - Przeciwległe */
+        .pos-hate  { transform: rotate(90deg) translate(400px) rotate(-90deg); }
+        .pos-death { transform: rotate(270deg) translate(400px) rotate(-270deg); }
+
+        
+        /* ORBITA 4 (Promień ~500px) - WTF */
+          .pos-collector { transform: translate(550px); }
+
+
+        /* --- TOOLTIPY --- */
+        .god-info {
+            position: absolute;
+            bottom: -60px; left: 50%; transform: translateX(-50%);
+            width: 200px;
+            text-align: center;
+            opacity: 0; transition: 0.3s; pointer-events: none;
+            background: rgba(0,0,0,0.8); padding: 5px; border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 200;
+        }
+        .satellite:hover .god-info, .center-god:hover .god-info { opacity: 1; }
+        .god-name { font-family: 'Cinzel'; font-weight: 700; text-transform: uppercase; color: #fff; }
+        .god-type { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
+
+        /* PRZYCISK POWROTU */
+        .back-btn {
+            position: absolute; top: 30px; left: 30px;
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-family: 'Cinzel', serif; border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px; z-index: 100; transition: 0.3s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        /* --- ANIMACJE --- */
+        @keyframes spinRight { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes spinLeft  { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
+        @keyframes spinWobble { 
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); } 
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(0.9); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
+        /* Counter Animations (do wnętrza satelit) */
+        @keyframes counterRight { 100% { transform: rotate(-360deg); } }
+        @keyframes counterLeft  { 100% { transform: rotate(360deg); } }
+
+        /* KOLORY DLA TYPÓW BOGÓW */
+        .type-good { color: #f1c40f; }
+        .type-neutral { color: #bdc3c7; }
+        .type-evil { color: #c0392b; }
+        .type-wtf { color: #d35400; }
+
+        /* MOBILKI */
+        @media (max-width: 900px) {
+            .system-container { transform: scale(0.5); } /* Skalujemy wszystko w dół na telefonie */
+        }
+        /* --- NOWA ORBITA DLA NEL (1.5) --- */
+        .ring-nel {
+            width: 440px; height: 440px; /* Między 300 a 550 */
+            border: 1px dashed rgba(175, 122, 197, 0.4); /* Fioletowa */
+            animation: spinRight 70s linear infinite; /* Kręci się w prawo, wolniej niż Suntos */
+            z-index: 5;
+        }
+
+        /* Pozycja Nel na nowej orbicie (Promień ~220px) */
+        
+            /* Pozycja Nel na nowej orbicie (Promień 220px, przesunięta o 45 stopni) */
+        .pos-nel { 
+            /* Rotate 45deg przesuwa ją w dół, translate wypycha, rotate -45deg prostuje obrazek */
+            transform: rotate(45deg) translate(220px) rotate(-45deg); 
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="postacie.html" class="back-btn">← MENU GŁÓWNE</a>
+    <div class="universe-bg"></div>
+
+    <div class="system-container">
+
+        <a href="drelwen.html" class="center-god">
+            <img src="../assets/god_drelwen.png" alt="Drelwen">
+            <div class="god-info" style="bottom: -80px;">
+                <div class="god-name">DRELWEN</div>
+                <div class="god-type" style="color:#fff;">Autor Rzeczywistości</div>
+            </div>
+        </a>
+
+        <div class="orbit-ring ring-1">
+            
+            <a href="suntos.html" class="satellite pos-suntos">
+                <div class="counter-rotate" style="animation-name: counterRight;">
+                    <img src="../assets/god_suntos.png" style="border-color: #f1c40f; box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);">
+                    <div class="god-info">
+                        <div class="god-name">Suntos</div>
+                        <div class="god-type type-good">Pan Światła</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="geldef.html" class="satellite pos-geldef">
+                <div class="counter-rotate" style="animation-name: counterRight;">
+                    <img src="../assets/god_geldef.png" style="border-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);">
+                    <div class="god-info">
+                        <div class="god-name">Geldef</div>
+                        <div class="god-type type-good">Matka Natura</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="orbit-ring ring-nel">
+            <a href="nel.html" class="satellite pos-nel">
+                <div class="counter-rotate" style="animation-name: counterRight;">
+                    <img src="../assets/nel_1.png" style="border-color: #2f393d; box-shadow: 0 0 20px rgba(57, 71, 75, 0.6);">
+                    <div class="god-info">
+                        <div class="god-name">Nel</div>
+                        <div class="god-type" style="color:#2e373d;">Smok</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="orbit-ring ring-2">
+            
+            <a href="mechavior.html" class="satellite pos-mechavior">
+                <div class="counter-rotate" style="animation-name: counterLeft;">
+                    <img src="../assets/god_mechavior.png" style="border-color: #95a5a6;">
+                    <div class="god-info">
+                        <div class="god-name">Mechavior</div>
+                        <div class="god-type type-neutral">Bóg Maszyn</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="yashara.html" class="satellite pos-yashara">
+                <div class="counter-rotate" style="animation-name: counterLeft;">
+                    <img src="../assets/god_yashara.png" style="border-color: #9b59b6;">
+                    <div class="god-info">
+                        <div class="god-name">Yashara</div>
+                        <div class="god-type type-neutral">Pani Val'Serinu</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="neremarth.html" class="satellite pos-neremarth">
+                <div class="counter-rotate" style="animation-name: counterLeft;">
+                    <img src="../assets/god_neremarth.png" style="border-color: #34495e;">
+                    <div class="god-info">
+                        <div class="god-name">Neremarth</div>
+                        <div class="god-type type-neutral">Bóg Ernoyi</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="orbit-ring ring-3">
+            
+            <a href="awatar_nienawisci.html" class="satellite pos-hate">
+                <div class="counter-rotate" style="animation-name: counterRight;">
+                    <img src="../assets/god_hate.png" style="border-color: #c0392b; box-shadow: 0 0 20px rgba(192, 57, 43, 0.6);">
+                    <div class="god-info">
+                        <div class="god-name">Nienawiść</div>
+                        <div class="god-type type-evil">Awatar</div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="awatar_smerci.html" class="satellite pos-death">
+                <div class="counter-rotate" style="animation-name: counterRight;">
+                    <img src="../assets/god_death.png" style="border-color: #555; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+                    <div class="god-info">
+                        <div class="god-name">Śmierć</div>
+                        <div class="god-type type-evil">Awatar</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="orbit-ring ring-4">
+            <a href="kolekcjoner.html" class="satellite pos-collector">
+                <div class="counter-rotate" style="animation-name: counterRight;"> 
+                    <img src="../assets/god_collector.png" style="border-color: #d35400; border-style: dashed;">
+                    <div class="god-info">
+                        <div class="god-name">Kolekcjoner</div>
+                        <div class="god-type type-wtf">Kukła i Osioł</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

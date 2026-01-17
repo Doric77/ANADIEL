@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Anadiel: Mientus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Raleway:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KOLORYSTYKA MIENTUSA (MIĘTA / NATURA / ENERGIA) --- */
+        :root {
+            --accent: #00b894;                 /* Żywa mięta */
+            --accent-dark: #006266;            /* Ciemna zieleń dżungli */
+            --bg-panel: rgba(10, 25, 20, 0.9); /* Ciemnozielony panel */
+            --text-primary: #e0f2f1;           /* Miętowa biel */
+            
+            --border-color: rgba(0, 184, 148, 0.5);
+        }
+
+        /* --- BAZA I TŁO (BLUR 1PX / RGBA 0.3) --- */
+        body {
+            background-color: #051510;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            /* JAŚNIEJSZE TŁO (0.3) */
+            background: 
+                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+                url('../assets/mientus_tlo.png');
+            background-size: cover; background-position: center;
+            
+            /* OSTRZEJSZE TŁO (1px) */
+            filter: blur(3px); 
+            transform: scale(1.02);
+            will-change: transform;
+        }
+
+        /* --- KONTENER --- */
+        .container {
+            max-width: 1200px; width: 100%;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 40px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0, 184, 148, 0.3);
+            padding: 40px;
+        }
+
+        /* --- LEWA KOLUMNA --- */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+
+        h1 {
+            font-family: 'Cinzel', serif; color: #fff; font-size: 3.5rem;
+            font-weight: 800; margin: 0; text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--accent);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block; width: fit-content;
+            padding-bottom: 10px;
+        }
+
+        .logline {
+            font-size: 1.2rem; font-weight: 500; font-style: italic;
+            background: rgba(0, 184, 148, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 25px; color: #b2dfdb;
+        }
+
+        /* --- HARMONIJKA --- */
+        .accordion {
+            background: linear-gradient(90deg, #0a1f1a, #05100d); 
+            color: #55efc4;
+            cursor: pointer; padding: 20px 25px; width: 100%;
+            border: 1px solid #16a085; border-left: 4px solid #0e6655;
+            text-align: left; outline: none; font-size: 1.1rem; font-weight: 700;
+            transition: 0.3s; font-family: 'Cinzel', serif;
+            display: flex; justify-content: space-between; align-items: center;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .accordion:hover, .active {
+            background: #0e6655;
+            border-left: 4px solid var(--accent); color: #fff;
+        }
+
+        .accordion::after { content: '+'; font-weight: bold; }
+        .active::after { content: '−'; transform: rotate(180deg); color: var(--accent); }
+
+        .panel {
+            padding: 0 25px; background-color: rgba(10, 30, 25, 0.6);
+            border: 1px solid #16a085; border-top: none;
+            display: none; overflow: hidden; line-height: 1.7;
+        }
+        
+        .panel ul { padding-left: 20px; margin: 25px 0; }
+        .panel li { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        strong { color: var(--accent); font-weight: 700; }
+
+        /* SEKRETY (Tutaj bardziej ciekawostki) */
+        .accordion.redacted { opacity: 1; color: #a3e4d7; border-color: #48c9b0; }
+        .redacted-text {
+            font-family: 'Cinzel', serif; text-align: center; padding: 30px;
+            color: #e0f2f1; background: rgba(0, 184, 148, 0.2); 
+            font-style: italic; border: 1px dashed var(--accent);
+        }
+
+        /* CYTAT (Mowa zwierząt) */
+        .quote-static {
+            text-align: center; font-family: 'Cinzel', serif; font-size: 1.4rem;
+            font-style: italic; color: #fff; padding: 40px 20px;
+            margin-top: 30px; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- PRAWA KOLUMNA --- */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+
+        .char-image-container {
+            width: 100%; aspect-ratio: 4/3; 
+            background: #000; border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0, 184, 148, 0.4);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .char-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s ease; filter: contrast(1.1) brightness(1.05);
+        }
+        .char-image-container:hover img { transform: scale(1.03); }
+
+        .infobox {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            font-size: 0.95rem; background: rgba(10, 25, 20, 0.8);
+            border: 1px solid var(--border-color);
+        }
+        .infobox td { padding: 15px; border-bottom: 1px solid rgba(0, 184, 148, 0.2); }
+        .infobox-label { font-weight: 700; color: var(--accent); width: 45%; text-transform: uppercase; }
+        .infobox-value { text-align: right; }
+
+        .related-links {
+            background: rgba(10, 25, 20, 0.8); padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .related-header {
+            font-family: 'Cinzel', serif; color: var(--accent);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .related-links a {
+            display: block; color: #a2d9ce; text-decoration: none;
+            padding: 8px 0; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .related-links a:hover { color: #fff; padding-left: 10px; text-shadow: 0 0 5px var(--accent); }
+
+        .back-btn {
+            display: inline-block; margin-top: 30px; color: #00b894;
+            text-decoration: none; font-size: 0.9rem; transition: 0.3s;
+            font-family: 'Cinzel', serif; letter-spacing: 1px; border: 1px solid #006266;
+            padding: 10px 20px; text-align: center;
+        }
+        .back-btn:hover { border-color: var(--accent); color: #fff; background: rgba(0, 184, 148, 0.2); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <main class="main-content">
+            
+            <h1>MIĘTUS</h1>
+
+            <div class="logline">
+                Niezwykły gepard o futrze barwy świeżej mięty. Wierny towarzysz Evie, który rozumie każde jej słowo (i często przewraca na nie oczami). 
+                
+            </div>
+
+            <button class="accordion">ZJAWISKO NATURY</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Umaszczenie:</strong> Unikalne, miętowo-zielone futro z ciemniejszymi cętkami. Pozwala mu to na doskonały kamuflaż w egzotycznej florze pewnych regionów.</li>
+                    <li><strong>Mowa:</strong> Nie mówi ludzkim głosem (w przeciwieństwie do Tiki), ale jego mruczenie, warknięcia i spojrzenia są tak wymowne, że Evie zawsze wie, o co mu chodzi.</li>
+                    <li><strong>Charakter:</strong> Lojalny obrońca, który zamienia się w wielką przytulankę, gdy tylko minie zagrożenie.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">WIĘŹ MENTALNA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Symbioza:</strong> Mientus i Evie stanowią jeden organizm.</li>
+                    <li><strong>Opiekun:</strong> Gdy Evie śpi w dziczy, Mientus zawsze czuwa, grzejąc ją swoim futrem. Jest dla niej żywą tarczą i najlepszym przyjacielem.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">BESTIA BOJOWA</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Szybkość:</strong> Niezwykle szybki jak na gepardy przystało.</li>
+                    <li><strong>Tiki:</strong> Toleruje wiewiórkę Tiki, choć czasem ma ochotę ją zjeść.</li>
+                </ul>
+            </div>
+
+            <button class="accordion redacted">DLACZEGO MIĘTOWY?</button>
+            <div class="panel">
+                <div class="redacted-text">
+                   Pochodzi z rasy ,której grozi wyginięcie "Mientari".
+                </div>
+            </div>
+
+            <div class="quote-static">
+                „Mrrrrauu? <br>
+                (Tłumaczenie: Czy zamierzasz zjeść tę kanapkę, czy mogę ją ukraść?)”
+            </div>
+
+            <a href="postacie_drugoplanowe.html" class="back-btn">← WRÓĆ DO POSTACI</a>
+
+        </main>
+
+        <aside class="sidebar">
+            
+            <div class="char-image-container">
+                <img src="../assets/mientus.png" alt="Mientus">
+            </div>
+
+            <table class="infobox">
+                <tr><td class="infobox-label">Gatunek</td><td class="infobox-value">Miętowy Gepard</td></tr>
+                <tr><td class="infobox-label">Właściciel</td><td class="infobox-value">Evie</td></tr>
+                <tr><td class="infobox-label">Ulubione Zajęcie</td><td class="infobox-value">Drzemka / Jedzenie</td></tr>
+                <tr><td class="infobox-label">Wróg</td><td class="infobox-value" style="color:#e74c3c;">Pusty Brzuch</td></tr>
+                <tr><td class="infobox-label">Status</td><td class="infobox-value" style="color:#00b894;">Najlepszy Chłopak</td></tr>
+            </table>
+
+            <div class="related-links">
+                <div class="related-header">STADO</div>
+                
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:10px; opacity:0.8;">PANI</div>
+                <a href="evie.html">
+                    Evie
+                    <span style="display:block; font-size:0.75rem; color:#a2d9ce; font-weight:400;">Jedyna, której słucha.</span>
+                </a>
+
+                <div style="color:var(--accent); font-size:0.75rem; font-weight:800; margin-top:15px; opacity:0.8;">Zwierzęca kumpela</div>
+                <a href="tiki.html">
+                    Tiki
+                    <span style="display:block; font-size:0.75rem; color:#f1c40f; font-weight:400;">Wiewiórka z piekła rodem.</span>
+                </a>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") { panel.style.display = "none"; } 
+                else { panel.style.display = "block"; }
+            });
+        }
+    </script>
+
+</body>
+</html>
